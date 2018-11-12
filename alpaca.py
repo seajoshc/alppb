@@ -7,27 +7,33 @@ compatability for programs using them on AWS Lambda.
 __author__ = "Josh Campbell"
 __version__ = "0.1.0"
 __license__ = "Apache2"
+import base64
+import subprocess
 import boto3
 from botocore.exceptions import ClientError
 
 
-def create_build_project(client):
+GET_AWS_ACCOUNT = "aws iam get-role --role-name 'CodeBuildTesting' --query 'Role.Arn' --output text"
+
+
+def create_build_project(client, role):
     """ Creates a new AWS CodeBuild Project to build the pip package(s)"""
-    response = client.create_project(
+    client.create_project(
         name='alpacaBuilder',
         source={
             'type': 'NO_SOURCE',
-            'buildspec': '',
+            'buildspec': base64.b64decode("dmVyc2lvbjogMC4yICAgICAgICAgCnBoYXNlczoKICBidWlsZDoKICAgIGNvbW1hbmRzOgogICAgICAtIHBpcCBpbnN0YWxsIHJlcXVlc3RzIC10IHBpcGJ1aWxkCmFydGlmYWN0czoKICBmaWxlczoKICAgIC0gJ3BpcGJ1aWxkLycKICBuYW1lOiBwaXBidWlsZC56aXA=").decode(encoding='UTF-8'),
         },
         artifacts={
-            'type': 'NO_ARTIFACTs',
+            'type': 'S3',
+            'location': 'rebukethe.net'
         },
         environment={
             'type': 'LINUX_CONTAINER',
             'image': 'aws/codebuild/python:3.6.5-1.3.1',
             'computeType': 'BUILD_GENERAL1_SMALL',
         },
-        serviceRole='',
+        serviceRole=role,
     )
 
 
@@ -39,7 +45,8 @@ def create_client():
 def main():
     """ Main entry point of the app """
     client = create_client()
-    create_build_project(client)
+    role = str(subprocess.check_output(GET_AWS_ACCOUNT, shell=True).decode(encoding='UTF-8')).rstrip()
+    create_build_project(client, role)
     print(client)
 
 
