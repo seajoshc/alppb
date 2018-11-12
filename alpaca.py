@@ -18,6 +18,7 @@ GET_AWS_ACCOUNT = "aws iam get-role --role-name 'CodeBuildTesting' --query 'Role
 
 def create_build_project(client, role):
     """ Creates a new AWS CodeBuild Project to build the pip package(s)"""
+    print("Creating build project...")
     client.create_project(
         name='alpacaBuilder',
         source={
@@ -39,22 +40,25 @@ def create_build_project(client, role):
 
 def delete_build_project(client):
     """ Deletes an AWS CodeBuild project """
-    print("Deleting CodeBuild project...")
+    print("Deleting build project...")
     client.delete_project(name="alpacaBuilder")
 
 
 def create_client():
     """ Creates a new boto3 client """
+    print("Creating boto3 client...")
     return boto3.client('codebuild')
 
 
 def main():
     """ Main entry point of the app """
+    print("Starting alpaca...")
     client = create_client()
     role = str(subprocess.check_output(GET_AWS_ACCOUNT, shell=True).decode(encoding='UTF-8')).rstrip()
     create_build_project(client, role)
     delete_build_project(client)
     print(client)
+    print("Exiting...")
 
 
 if __name__ == "__main__":
