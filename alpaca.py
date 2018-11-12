@@ -23,11 +23,11 @@ def create_build_project(client, role):
         name='alpacaBuilder',
         source={
             'type': 'NO_SOURCE',
-            'buildspec': base64.b64decode("dmVyc2lvbjogMC4yICAgICAgICAgCnBoYXNlczoKICBidWlsZDoKICAgIGNvbW1hbmRzOgogICAgICAtIHBpcCBpbnN0YWxsIHJlcXVlc3RzIC10IHBpcGJ1aWxkCmFydGlmYWN0czoKICBmaWxlczoKICAgIC0gJ3BpcGJ1aWxkLycKICBuYW1lOiBwaXBidWlsZC56aXA=").decode(encoding='UTF-8'),
+            'buildspec': base64.b64decode("dmVyc2lvbjogMC4yICAgICAgICAgCnBoYXNlczoKICBidWlsZDoKICAgIGNvbW1hbmRzOgogICAgICAtIHBpcCBpbnN0YWxsIHJlcXVlc3RzIC10IHBpcGJ1aWxkCmFydGlmYWN0czoKICBmaWxlczoKICAgIC0gJ3BpcGJ1aWxkLyoqLyonCiAgbmFtZTogcGlwYnVpbGQuemlw").decode(encoding='UTF-8'),
         },
         artifacts={
             'type': 'S3',
-            'location': 'rebukethe.net'
+            'location': 'rebukethe.net',
         },
         environment={
             'type': 'LINUX_CONTAINER',
@@ -44,6 +44,12 @@ def delete_build_project(client):
     client.delete_project(name="alpacaBuilder")
 
 
+def start_build(client):
+    """ Start a build project """
+    print("Starting build project...")
+    client.start_build(projectName='alpacaBuilder')
+
+
 def create_client():
     """ Creates a new boto3 client """
     print("Creating boto3 client...")
@@ -56,8 +62,8 @@ def main():
     client = create_client()
     role = str(subprocess.check_output(GET_AWS_ACCOUNT, shell=True).decode(encoding='UTF-8')).rstrip()
     create_build_project(client, role)
+    start_build(client)
     delete_build_project(client)
-    print(client)
     print("Exiting...")
 
 
