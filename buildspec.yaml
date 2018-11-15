@@ -2,8 +2,9 @@ version: 0.2
 phases:
   build:
     commands:
-      - pip install requests -t pipbuild
+      - pip-3.6 install requests -t alpaca
+      - cd alpaca/
+      - zip -r ../alpaca.zip *
 artifacts:
   files:
-    - 'pipbuild/**/*'
-  name: pipbuild.zip
+    - alpaca.zip
