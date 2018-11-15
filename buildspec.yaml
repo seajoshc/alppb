@@ -1,0 +1,9 @@
+version: 0.2         
+phases:
+  build:
+    commands:
+      - pip install requests -t pipbuild
+artifacts:
+  files:
+    - 'pipbuild/**/*'
+  name: pipbuild.zip
