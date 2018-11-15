@@ -19,26 +19,26 @@ DOWNLOAD_ARTIFACT = "aws s3 cp s3://rebukethe.net/alpacaBuilder/alpaca.zip ."
 DELETE_ARTIFACT = "aws s3 rm s3://rebukethe.net/alpacaBuilder/alpaca.zip"
 
 
-def create_client():
+def create_client(resource):
     """ Creates a new boto3 client """
-    print("Creating boto3 client...")
-    return boto3.client('codebuild')
+    print("Creating boto3 client for {}...".format(resource))
+    return boto3.client(resource)
 
 
 def main():
     """ Main entry point of the app """
     print("Starting alpaca...")
-    client = create_client()
+    codebuild_client = create_client('codebuild')
     role = str(subprocess.check_output(GET_AWS_ACCOUNT, shell=True)
                          .decode(encoding='UTF-8')).rstrip()
-    create_build_project(client, role)
-    build_artifact(client)
+    create_build_project(codebuild_client, role)
+    build_artifact(codebuild_client)
 
     # Download the artifact.
     subprocess.run(DOWNLOAD_ARTIFACT.split(' '))
 
     # Cleanup phase.
-    delete_build_project(client)
+    delete_build_project(codebuild_client)
     subprocess.run(DELETE_ARTIFACT.split(' '))
 
     print("Exiting...")
