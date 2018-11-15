@@ -15,6 +15,8 @@ from botocore.exceptions import ClientError
 
 GET_AWS_ACCOUNT = "aws iam get-role --role-name 'CodeBuildTesting' "\
                   "--query 'Role.Arn' --output text"
+DOWNLOAD_ARTIFACT = "aws s3 cp s3://rebukethe.net/alpacaBuilder/alpaca.zip ."
+DELETE_ARTIFACT = "aws s3 rm s3://rebukethe.net/alpacaBuilder/alpaca.zip"
 
 
 def create_build_project(client, role):
@@ -96,7 +98,13 @@ def main():
                          .decode(encoding='UTF-8')).rstrip()
     create_build_project(client, role)
     build_artifact(client)
+
+    # Download the artifact.
+    subprocess.run(DOWNLOAD_ARTIFACT.split(' '))
+
+    # Cleanup phase.
     delete_build_project(client)
+    subprocess.run(DELETE_ARTIFACT.split(' '))
 
     print("Exiting...")
 
