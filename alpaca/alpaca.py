@@ -31,6 +31,8 @@ def create_resource(service):
     Returns
     -------
     boto3.resources.factory.service.ServiceResource
+        See https://boto3.amazonaws.com/v1/documentation/api/latest/guide
+        /resources.html for more information.
     """
     print("Creating boto3 resource for {}...".format(service))
     return boto3.resource(service)
@@ -53,7 +55,7 @@ def main():
     # TODO be smarter about checking if the role is ready
     print("Waiting 10 seconds for IAM Role propagation before continuing...")
     time.sleep(10)
-    codebuild.create_build_project(codebuild_client, role)
+    codebuild.create_build_project(codebuild_client, role, bucket)
     codebuild.build_artifact(codebuild_client)
 
     # Download the artifact.
