@@ -56,14 +56,13 @@ def get_artifact_location(client, build_id):
     and then gets location of the artifact """
     response = client.batch_get_builds(ids=[build_id])
     # batch_get_builds() will return an array with one element.
-    status = response.get('builds')[0].get('buildStatus')
-    print("Build status is {}".format(status))
+    status = str(response.get('builds')[0].get('buildStatus'))
     if status == 'SUCCEEDED':
         print("Build completed...")
         # Build is done, return the artifact location.
         return str(response.get('builds')[0].get('artifacts').get('location'))
     else:
-        print("Build not done, waiting 10 seconds...")
+        print("Build {}, waiting 10 seconds...".format(status))
         time.sleep(10)
         # Recursively call until the build is done.
         return get_artifact_location(client, build_id)
