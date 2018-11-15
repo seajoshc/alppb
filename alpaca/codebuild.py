@@ -5,8 +5,26 @@ import base64
 import time
 
 
-def create_build_project(client, role):
-    """ Creates a new AWS CodeBuild Project to build the pip package(s)"""
+def create_build_project(client, role, bucket):
+    """
+    Creates a new AWS CodeBuild Project to build the PyPi package(s).
+
+    Parameters
+    ----------
+    client : botocore.client.S3
+        A boto3 client for S3.
+    role : str
+        Name of the IAM Role the AWS CodeBuild project should use.
+    bucket : str
+        Name of the bucket the build artifact will be put in.
+
+    Returns
+    -------
+    dict
+        boto3 response object. See https://boto3.amazonaws.com/v1/documentation
+        /api/latest/reference/services
+        /codebuild.html#CodeBuild.Client.create_project for more information.
+    """
     print("Creating build project...")
     response = client.create_project(
         name='alpacaBuilder',
@@ -22,7 +40,7 @@ def create_build_project(client, role):
         },
         artifacts={
             'type': 'S3',
-            'location': 'rebukethe.net',
+            'location': bucket,
         },
         environment={
             'type': 'LINUX_CONTAINER',
