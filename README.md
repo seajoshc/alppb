@@ -15,7 +15,8 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
 - [ ] Allow specification of a requirements.txt file to use as a list of all modules to build
 - [ ] Unit tests
 - [ ] Integration tests
-- [ ] Submit to PyPi
+- [ ] Submit to PyPi and make into an executable
+- [ ] Dockerize and submit to Dockerhub
 
 
 ## Exceptions
