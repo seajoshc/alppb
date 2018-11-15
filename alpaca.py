@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 """
 Alpaca
-Builds Python pip packages on Amazon Linux to ensure
-compatability for programs using them on AWS Lambda.
+Builds Python modules on Amazon Linux using AWS CodeBuild and downloads them.
 """
 __author__ = "Josh Campbell"
 __version__ = "0.1.0"
