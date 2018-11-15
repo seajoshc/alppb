@@ -5,6 +5,7 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
 - [X] Foundation - create a CodeBuild project with hardcoded build that puts an artifact in s3
 - [ ] Fix artifact so its a zip of the contents (excluding parent dir)
 - [ ] Download the module locally
+- [ ] Move aws-cli stuff to boto3
 - [ ] Move codebuild stuff to a library?
 - [ ] Allow user specification of the module to be built
 - [ ] Delete the artifact from s3 as part of cleanup
