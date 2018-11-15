@@ -14,7 +14,8 @@ import boto3
 from botocore.exceptions import ClientError
 
 
-GET_AWS_ACCOUNT = "aws iam get-role --role-name 'CodeBuildTesting' --query 'Role.Arn' --output text"
+GET_AWS_ACCOUNT = "aws iam get-role --role-name 'CodeBuildTesting' "\
+                  "--query 'Role.Arn' --output text"
 
 
 def create_build_project(client, role):
@@ -24,7 +25,11 @@ def create_build_project(client, role):
         name='alpacaBuilder',
         source={
             'type': 'NO_SOURCE',
-            'buildspec': base64.b64decode("dmVyc2lvbjogMC4yICAgICAgICAgCnBoYXNlczoKICBidWlsZDoKICAgIGNvbW1hbmRzOgogICAgICAtIHBpcCBpbnN0YWxsIHJlcXVlc3RzIC10IHBpcGJ1aWxkCmFydGlmYWN0czoKICBmaWxlczoKICAgIC0gJ3BpcGJ1aWxkLyoqLyonCiAgbmFtZTogcGlwYnVpbGQuemlw").decode(encoding='UTF-8'),
+            'buildspec': base64.b64decode(
+                "dmVyc2lvbjogMC4yICAgICAgICAgCnBoYXNlczoKICBidWlsZDoKICAgIGNv"
+                "bW1hbmRzOgogICAgICAtIHBpcCBpbnN0YWxsIHJlcXVlc3RzIC10IHBpcGJ1"
+                "aWxkCmFydGlmYWN0czoKICBmaWxlczoKICAgIC0gJ3BpcGJ1aWxkLyoqLyon"
+                "CiAgbmFtZTogcGlwYnVpbGQuemlw").decode(encoding='UTF-8'),
         },
         artifacts={
             'type': 'S3',
@@ -87,7 +92,8 @@ def main():
     """ Main entry point of the app """
     print("Starting alpaca...")
     client = create_client()
-    role = str(subprocess.check_output(GET_AWS_ACCOUNT, shell=True).decode(encoding='UTF-8')).rstrip()
+    role = str(subprocess.check_output(GET_AWS_ACCOUNT, shell=True)
+                         .decode(encoding='UTF-8')).rstrip()
     create_build_project(client, role)
     build_artifact(client)
     delete_build_project(client)
