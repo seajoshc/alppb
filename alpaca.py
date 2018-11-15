@@ -19,7 +19,7 @@ GET_AWS_ACCOUNT = "aws iam get-role --role-name 'CodeBuildTesting' --query 'Role
 def create_build_project(client, role):
     """ Creates a new AWS CodeBuild Project to build the pip package(s)"""
     print("Creating build project...")
-    client.create_project(
+    response = client.create_project(
         name='alpacaBuilder',
         source={
             'type': 'NO_SOURCE',
@@ -36,6 +36,8 @@ def create_build_project(client, role):
         },
         serviceRole=role,
     )
+
+    return str(response.get('project', {}).get('arn'))
 
 
 def delete_build_project(client):
@@ -61,7 +63,8 @@ def main():
     print("Starting alpaca...")
     client = create_client()
     role = str(subprocess.check_output(GET_AWS_ACCOUNT, shell=True).decode(encoding='UTF-8')).rstrip()
-    create_build_project(client, role)
+    arn = create_build_project(client, role)
+    print("Build Project ARN is {}...".format(arn))
     start_build(client)
     delete_build_project(client)
     print("Exiting...")
