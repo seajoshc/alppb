@@ -8,9 +8,7 @@ __version__ = "0.1.0"
 __license__ = "MIT"
 import subprocess
 import boto3
-from codebuild import create_build_project
-from codebuild import build_artifact
-from codebuild import delete_build_project
+import codebuild
 
 
 GET_AWS_ACCOUNT = "aws iam get-role --role-name 'CodeBuildTesting' "\
@@ -31,14 +29,14 @@ def main():
     codebuild_client = create_client('codebuild')
     role = str(subprocess.check_output(GET_AWS_ACCOUNT, shell=True)
                          .decode(encoding='UTF-8')).rstrip()
-    create_build_project(codebuild_client, role)
-    build_artifact(codebuild_client)
+    codebuild.create_build_project(codebuild_client, role)
+    codebuild.build_artifact(codebuild_client)
 
     # Download the artifact.
     subprocess.run(DOWNLOAD_ARTIFACT.split(' '))
 
     # Cleanup phase.
-    delete_build_project(codebuild_client)
+    codebuild.delete_build_project(codebuild_client)
     subprocess.run(DELETE_ARTIFACT.split(' '))
 
     print("Exiting...")
