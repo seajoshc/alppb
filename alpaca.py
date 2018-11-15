@@ -25,10 +25,12 @@ def create_build_project(client, role):
         source={
             'type': 'NO_SOURCE',
             'buildspec': base64.b64decode(
-                "dmVyc2lvbjogMC4yICAgICAgICAgCnBoYXNlczoKICBidWlsZDoKICAgIGNv"
-                "bW1hbmRzOgogICAgICAtIHBpcCBpbnN0YWxsIHJlcXVlc3RzIC10IHBpcGJ1"
-                "aWxkCmFydGlmYWN0czoKICBmaWxlczoKICAgIC0gJ3BpcGJ1aWxkLyoqLyon"
-                "CiAgbmFtZTogcGlwYnVpbGQuemlw").decode(encoding='UTF-8'),
+                """
+                dmVyc2lvbjogMC4yICAgICAgICAgCnBoYXNlczoKICBidWlsZDoKICAgIGNvbW1
+                hbmRzOgogICAgICAtIHBpcC0zLjYgaW5zdGFsbCByZXF1ZXN0cyAtdCBhbHBhY2
+                EKICAgICAgLSBjZCBhbHBhY2EvCiAgICAgIC0gemlwIC1yIC4uL2FscGFjYS56a
+                XAgKgphcnRpZmFjdHM6CiAgZmlsZXM6CiAgICAtIGFscGFjYS56aXA=
+                """).decode(encoding='UTF-8'),
         },
         artifacts={
             'type': 'S3',
@@ -36,7 +38,7 @@ def create_build_project(client, role):
         },
         environment={
             'type': 'LINUX_CONTAINER',
-            'image': 'aws/codebuild/python:3.6.5-1.3.1',
+            'image': 'irlrobot/amazonlinux1:latest',
             'computeType': 'BUILD_GENERAL1_SMALL',
         },
         serviceRole=role,
