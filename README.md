@@ -8,8 +8,8 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
 - [X] Download the module locally to dir alpaca was run from
 - [X] Move codebuild stuff to a module
 - [X] Delete the artifact from s3 as part of cleanup
-- [ ] Add creation of IAM role for CodeBuild instead of using hardcoded, pre-built role
-- [ ] Add deletion of IAM role as part of cleanup
+- [X] Add creation of IAM role for CodeBuild instead of using hardcoded, pre-built role
+- [X] Add deletion of IAM role as part of cleanup
 - [ ] Move aws-cli stuff to boto3
 - [ ] Add some randomness to the name of the build project to prevent any potential name collision on the off chance
 - [ ] Allow user specification of the desired module to be built using alpaca
