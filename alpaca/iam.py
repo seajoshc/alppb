@@ -55,4 +55,10 @@ def add_role_policy(client):
 def delete_role(client):
     """ Deletes the IAM Role created above """
     print("Deleting IAM Role...")
+    # AWS API wants all role policies deleted before the role itself.
+    # TODO get all policies on the role and then delete in case it was modified
+    client.delete_role_policy(
+        RoleName='alpacaBuilderRole',
+        PolicyName='alpacaBuilderPolicy'
+    )
     client.delete_role(RoleName='alpacaBuilderRole')
