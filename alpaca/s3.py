@@ -4,7 +4,7 @@ Administration of Amazon S3 Resources through a boto3 client.
 
 
 def download_artifact(resource, bucket, key='alpacaBuilder/alpaca.zip',
-                      local_path='.'):
+                      local_path='alpaca.zip'):
     """
     Fetches the artifact from Amazon S3 built by Alpaca .
 
@@ -19,7 +19,7 @@ def download_artifact(resource, bucket, key='alpacaBuilder/alpaca.zip',
         "alpacaBuilder/alpaca.zip".
     local_path: str
         The local path where the artifact will be downloaded. Defaults to the
-        current directory Alpaca is being run from (i.e. ".").
+        current directory Alpaca is being run from.
 
     Returns
     -------
