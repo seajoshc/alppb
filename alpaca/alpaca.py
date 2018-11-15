@@ -32,6 +32,7 @@ def create_resource(service):
     -------
     boto3.resources.factory.service.ServiceResource
     """
+    print("Creating boto3 resource for {}...".format(service))
     return boto3.resource(service)
 
 
