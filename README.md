@@ -22,3 +22,8 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
 ## Exceptions
 ResourceAlreadyExistsException
 * https://stackoverflow.com/questions/33068055/boto3-python-and-how-to-handle-errors/33663484#33663484
+
+# FAQs
+1) Where does the name Alpaca come from?
+
+When I was first thinking about this project, I was caling it the "Amazon Linux Python Application Compiler". I immediately noticed the acronym for that, ALPAC, was pretty close to Alpaca. It stuck with me, so I decided to keep it :)
