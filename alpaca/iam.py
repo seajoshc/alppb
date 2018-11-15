@@ -52,6 +52,7 @@ def add_role_policy(client):
             """).decode(encoding='UTF-8')),
     )
 
+
 def delete_role(client):
     """ Deletes the IAM Role created above """
     print("Deleting IAM Role...")
