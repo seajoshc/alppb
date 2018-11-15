@@ -9,6 +9,7 @@ __version__ = "0.1.0"
 __license__ = "Apache2"
 import base64
 import subprocess
+import time
 import boto3
 from botocore.exceptions import ClientError
 
@@ -46,10 +47,35 @@ def delete_build_project(client):
     client.delete_project(name="alpacaBuilder")
 
 
-def start_build(client):
-    """ Start a build project """
+def get_artifact_location(client, build_id):
+    """ Keeps checking until a build completes
+    and then gets location of the artifact """
+    response = client.batch_get_builds(ids=[build_id])
+    # batch_get_builds() will return an array with one element.
+    status = response.get('builds')[0].get('buildStatus')
+    print("Build status is {}".format(status))
+    if  status == 'SUCCEEDED':
+        print("Build completed...")
+        # Build is done, return the artifact location.
+        artifact_location = str(response.get('builds')[0].get('artifacts').get('location'))
+        print(">>>>>>Artifact Location is {}".format(artifact_location))
+        return artifact_location
+    else:
+        print("Build not done, waiting 10 seconds...")
+        time.sleep(10)
+        # Recursively call until the build is done.
+        get_artifact_location(client, build_id)
+
+
+def build_artifact(client):
+    """ Start a build and get the location of the artifact """
     print("Starting build project...")
-    client.start_build(projectName='alpacaBuilder')
+    response = client.start_build(projectName='alpacaBuilder')
+    build_id = str(response.get('build').get('id'))
+    print("Build ID is {}".format(build_id))
+    artifact_location = get_artifact_location(client, build_id)
+
+    return artifact_location
 
 
 def create_client():
@@ -65,7 +91,8 @@ def main():
     role = str(subprocess.check_output(GET_AWS_ACCOUNT, shell=True).decode(encoding='UTF-8')).rstrip()
     arn = create_build_project(client, role)
     print("Build Project ARN is {}...".format(arn))
-    start_build(client)
+    artifact_location = build_artifact(client)
+    print("Library location: {}".format(artifact_location))
     delete_build_project(client)
     print("Exiting...")
 
