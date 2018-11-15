@@ -10,11 +10,10 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
 - [X] Delete the artifact from s3 as part of cleanup
 - [X] Add creation of IAM role for CodeBuild instead of using hardcoded, pre-built role
 - [X] Add deletion of IAM role as part of cleanup
-- [ ] Move aws-cli stuff to boto3
-- [ ] Add some randomness to the name of the build project to prevent any potential name collision on the off chance
+- [X] Move aws-cli stuff to boto3
 - [ ] Allow user specification of the desired module to be built using alpaca
 ## MVP
-- [ ] Exception handling - retry for delete and create, and any control flow necessary
+- [ ] Exception handling - retry for delete and create, and any control flow necessary. Always cleanup created resources regardless of success or failure.
 - [ ] Default behavior is to create an s3 bucket and IAM role, but also allow user to optionally specify a bucket and/or policy
     - [ ] s3 bucket
     - [ ] IAM role
