@@ -47,4 +47,4 @@ def delete_artifact(client, bucket, key='alpacaBuilder/alpaca.zip'):
     -------
     """
     print("Deleting {} from S3 bucket {}...".format(key, bucket))
-    client.delete_object(Bucket=bucket,Key=key)
+    client.delete_object(Bucket=bucket, Key=key)
