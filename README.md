@@ -30,6 +30,8 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
 ResourceAlreadyExistsException
 * https://stackoverflow.com/questions/33068055/boto3-python-and-how-to-handle-errors/33663484#33663484
 
+from botocore.exceptions import ClientError
+
 # FAQs
 1) Where does the name Alpaca come from?
 
