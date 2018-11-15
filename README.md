@@ -25,6 +25,7 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
 - [ ] Integration tests
 - [ ] Submit to PyPi and make into an executable
 - [ ] Dockerize and submit to Dockerhub
+- [ ] Better docstrings everywhere
 
 ## Exceptions
 ResourceAlreadyExistsException
