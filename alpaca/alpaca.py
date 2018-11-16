@@ -6,6 +6,7 @@ Builds Python modules on Amazon Linux using AWS CodeBuild and downloads them.
 __author__ = "Josh Campbell"
 __version__ = "0.1.0"
 __license__ = "MIT"
+import argparse
 import time
 import boto3
 import codebuild
@@ -41,6 +42,12 @@ def create_resource(service):
 def main():
     """ Main entry point of the app """
     print("Starting alpaca...")
+
+    # Parsing arguments.
+    parser = argparse.ArgumentParser()
+    parser.add_argument("package", help="The PyPi package you want to build.")
+    args = parser.parse_args()
+
     # Create boto3 clients/resources used below.
     iam_client = create_client('iam')
     codebuild_client = create_client('codebuild')
@@ -55,7 +62,8 @@ def main():
     # TODO be smarter about checking if the role is ready
     print("Waiting 10 seconds for IAM Role propagation before continuing...")
     time.sleep(10)
-    codebuild.create_build_project(codebuild_client, role, bucket)
+    buildspec = codebuild.generate_buildspec(str(args.package))
+    codebuild.create_build_project(codebuild_client, role, bucket, buildspec)
     codebuild.build_artifact(codebuild_client)
 
     # Download the artifact.
