@@ -1,11 +1,45 @@
 """
 Administration of AWS CodeBuild Resources through a boto3 client.
 """
-import base64
 import time
+import yaml
 
 
-def create_build_project(client, role, bucket):
+def generate_buildspec(package):
+    """
+    Creates a valid Buildspec, from a template, for an AWS CodeBuild project.
+    The template requires a valid PyPi package to be specified.
+
+    Parameters
+    ----------
+    package : str
+        Name of the PyPi package to be built by AWS CodeBuild.
+
+    Returns
+    -------
+    str
+        The Buildspec in YAML.
+    """
+    return yaml.dump({
+        "version": 0.2,
+        "phases": {
+            "build": {
+                "commands": [
+                    "pip-3.6 install {} -t alpaca".format(package),
+                    "cd alpaca/",
+                    "zip -r ../alpaca.zip *"
+                ]
+            }
+        },
+        "artifacts": {
+            "files": [
+                "alpaca.zip"
+            ]
+        }
+    })
+
+
+def create_build_project(client, role, bucket, buildspec):
     """
     Creates a new AWS CodeBuild Project to build the PyPi package(s).
 
@@ -17,6 +51,8 @@ def create_build_project(client, role, bucket):
         Name of the IAM Role the AWS CodeBuild project should use.
     bucket : str
         Name of the bucket the build artifact will be put in.
+    buildspec : str
+        A valid AWS CodeBuild Buildspec in YAML. Use s3.generate_buildspec().
 
     Returns
     -------
@@ -30,13 +66,7 @@ def create_build_project(client, role, bucket):
         name='alpacaBuilder',
         source={
             'type': 'NO_SOURCE',
-            'buildspec': base64.b64decode(
-                """
-                dmVyc2lvbjogMC4yICAgICAgICAgCnBoYXNlczoKICBidWlsZDoKICAgIGNvbW1
-                hbmRzOgogICAgICAtIHBpcC0zLjYgaW5zdGFsbCByZXF1ZXN0cyAtdCBhbHBhY2
-                EKICAgICAgLSBjZCBhbHBhY2EvCiAgICAgIC0gemlwIC1yIC4uL2FscGFjYS56a
-                XAgKgphcnRpZmFjdHM6CiAgZmlsZXM6CiAgICAtIGFscGFjYS56aXA=
-                """).decode(encoding='UTF-8'),
+            'buildspec': buildspec,
         },
         artifacts={
             'type': 'S3',
