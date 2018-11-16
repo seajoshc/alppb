@@ -1,10 +1,10 @@
 """
 Administration of AWS IAM Resources through a boto3 client.
 """
-import base64
+import json
 
 
-def create_role(client):
+def create_role(client, bucket):
     """
     Creates an IAM Role to use with AWS CodeBuild
 
@@ -12,6 +12,9 @@ def create_role(client):
     ----------
     client : botocore.client.iam
         A boto3 client for IAM.
+
+    bucket : str
+        Name of an existing S3 bucket.
 
     Returns
     -------
@@ -21,21 +24,80 @@ def create_role(client):
     print("Creating IAM Role...")
     response = client.create_role(
         RoleName='alpacaBuilderRole',
-        AssumeRolePolicyDocument=str(base64.b64decode(
-            """
-            ewogICJWZXJzaW9uIjogIjIwMTItMTAtMTciLAogICJTdGF0ZW1lbnQiOiBbCiAgICB
-            7CiAgICAgICJFZmZlY3QiOiAiQWxsb3ciLAogICAgICAiUHJpbmNpcGFsIjogewogIC
-            AgICAgICJTZXJ2aWNlIjogImNvZGVidWlsZC5hbWF6b25hd3MuY29tIgogICAgICB9L
-            AogICAgICAiQWN0aW9uIjogInN0czpBc3N1bWVSb2xlIgogICAgfQogIF0KfQ==
-            """).decode(encoding='UTF-8')),
+        AssumeRolePolicyDocument=json.dumps({
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "codebuild.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        }),
         Description='This role is used by https://github.com/irlrobot/alpaca',
     )
-    add_role_policy(client)
+    add_role_policy(client, bucket)
 
     return str(response.get('Role').get('Arn'))
 
 
-def add_role_policy(client):
+def generate_role_policy(bucket):
+    """
+    Generates a valid IAM Role policy from a template. The template requires
+    the name of an existing S3 bucket.
+
+    Parameters
+    ----------
+    bucket : str
+        Name of an existing S3 bucket.
+
+    Returns
+    -------
+    str
+        The IAM Policy document in JSON.
+    """
+    return json.dumps({
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "CloudWatchLogsPolicy",
+                "Effect": "Allow",
+                "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                ],
+                "Resource": [
+                    "*"
+                ]
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:ListBucket"
+                ],
+                "Resource": [
+                    "arn:aws:s3:::{}".format(bucket)
+                ]
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:PutObject",
+                    "s3:GetObject",
+                    "s3:DeleteObject"
+                ],
+                "Resource": [
+                    "arn:aws:s3:::{}/*".format(bucket)
+                ]
+            }
+        ]
+    })
+
+
+def add_role_policy(client, bucket):
     """
     Adds an IAM Policy to a newly created IAM Role from iam.create_role().
 
@@ -44,6 +106,9 @@ def add_role_policy(client):
     client : botocore.client.iam
         A boto3 client for IAM.
 
+    bucket : str
+        Name of an existing S3 bucket.
+
     Returns
     -------
     """
@@ -51,27 +116,7 @@ def add_role_policy(client):
     client.put_role_policy(
         RoleName='alpacaBuilderRole',
         PolicyName='alpacaBuilderPolicy',
-        PolicyDocument=str(base64.b64decode(
-            """
-            ewogICAgIlZlcnNpb24iOiAiMjAxMi0xMC0xNyIsCiAgICAiU3RhdGVtZW50Ijo
-            gWwogICAgICAgIHsKICAgICAgICAgICAgIlNpZCI6ICJDbG91ZFdhdGNoTG9nc1
-            BvbGljeSIsCiAgICAgICAgICAgICJFZmZlY3QiOiAiQWxsb3ciLAogICAgICAgI
-            CAgICAiQWN0aW9uIjogWwogICAgICAgICAgICAgICAgImxvZ3M6Q3JlYXRlTG9n
-            R3JvdXAiLAogICAgICAgICAgICAgICAgImxvZ3M6Q3JlYXRlTG9nU3RyZWFtIiw
-            KICAgICAgICAgICAgICAgICJsb2dzOlB1dExvZ0V2ZW50cyIKICAgICAgICAgIC
-            AgXSwKICAgICAgICAgICAgIlJlc291cmNlIjogWwogICAgICAgICAgICAgICAgI
-            ioiCiAgICAgICAgICAgIF0KICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAg
-            ICAgIkVmZmVjdCI6ICJBbGxvdyIsCiAgICAgICAgICAgICJBY3Rpb24iOiBbCiA
-            gICAgICAgICAgICAgICAiczM6TGlzdEJ1Y2tldCIKICAgICAgICAgICAgXSwKIC
-            AgICAgICAgICAgIlJlc291cmNlIjogWwogICAgICAgICAgICAgICAgImFybjphd
-            3M6czM6OjpyZWJ1a2V0aGUubmV0IgogICAgICAgICAgICBdCiAgICAgICAgfSwK
-            ICAgICAgICB7CiAgICAgICAgICAgICJFZmZlY3QiOiAiQWxsb3ciLAogICAgICA
-            gICAgICAiQWN0aW9uIjogWwogICAgICAgICAgICAgICAgInMzOlB1dE9iamVjdC
-            IsCiAgICAgICAgICAgICAgICAiczM6R2V0T2JqZWN0IiwKICAgICAgICAgICAgI
-            CAgICJzMzpEZWxldGVPYmplY3QiCiAgICAgICAgICAgIF0sCiAgICAgICAgICAg
-            ICJSZXNvdXJjZSI6IFsKICAgICAgICAgICAgICAgICJhcm46YXdzOnMzOjo6cmV
-            idWtldGhlLm5ldC8qIgogICAgICAgICAgICBdCiAgICAgICAgfQogICAgXQp9
-            """).decode(encoding='UTF-8')),
+        PolicyDocument=generate_role_policy(bucket),
     )
 
 
