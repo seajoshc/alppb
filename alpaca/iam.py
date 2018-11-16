@@ -5,7 +5,19 @@ import base64
 
 
 def create_role(client):
-    """ Creates an IAM Role to use with AWS CodeBuild """
+    """
+    Creates an IAM Role to use with AWS CodeBuild
+
+    Parameters
+    ----------
+    client : botocore.client.iam
+        A boto3 client for IAM.
+
+    Returns
+    -------
+    str
+        ARN of the newly created IAM Role.
+    """
     print("Creating IAM Role...")
     response = client.create_role(
         RoleName='alpacaBuilderRole',
@@ -24,8 +36,18 @@ def create_role(client):
 
 
 def add_role_policy(client):
-    """ Creates an IAM Policy for Alpaca to use """
-    print("Attaching Policy to the the IAM Role...")
+    """
+    Adds an IAM Policy to a newly created IAM Role from iam.create_role().
+
+    Parameters
+    ----------
+    client : botocore.client.iam
+        A boto3 client for IAM.
+
+    Returns
+    -------
+    """
+    print(">>Attaching Policy to the the IAM Role...")
     client.put_role_policy(
         RoleName='alpacaBuilderRole',
         PolicyName='alpacaBuilderPolicy',
@@ -54,7 +76,17 @@ def add_role_policy(client):
 
 
 def delete_role(client):
-    """ Deletes the IAM Role created above """
+    """
+    Deletes an IAM Role created from iam.create_role().
+
+    Parameters
+    ----------
+    client : botocore.client.iam
+        A boto3 client for IAM.
+
+    Returns
+    -------
+    """
     print("Deleting IAM Role...")
     # AWS API wants all role policies deleted before the role itself.
     # TODO get all policies on the role and then delete in case it was modified
