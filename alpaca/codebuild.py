@@ -95,7 +95,7 @@ def delete_build_project(client):
     Returns
     -------
     """
-    print("Deleting build project and cleaning up...")
+    print("Deleting CodeBuild project...")
     client.delete_project(name="alpacaBuilder")
 
 
