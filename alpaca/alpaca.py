@@ -25,7 +25,7 @@ def create_client(service):
 
     Returns
     -------
-    botocore.client.S3
+    botocore.client.service
         See https://boto3.amazonaws.com/v1/documentation/api/latest/guide
         /clients.html for more information.
     """
@@ -73,7 +73,7 @@ def main():
     # Create Alpaca resources.
     role = iam.create_role(iam_client)
     # TODO be smarter about checking if the role is ready
-    print("Waiting 10 seconds for IAM Role propagation before continuing...")
+    print(">>Waiting 10 seconds for IAM Role propagation before continuing...")
     time.sleep(10)
     buildspec = codebuild.generate_buildspec(str(args.package))
     codebuild.create_build_project(codebuild_client, role, bucket, buildspec)
