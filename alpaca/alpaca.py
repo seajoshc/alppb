@@ -15,7 +15,20 @@ import s3
 
 
 def create_client(service):
-    """ Creates a new boto3 client """
+    """
+    Creates a boto3 client object for the specified service.
+
+    Parameters
+    ----------
+    service : str
+        The name of the AWS service to create the client for.
+
+    Returns
+    -------
+    botocore.client.S3
+        See https://boto3.amazonaws.com/v1/documentation/api/latest/guide
+        /clients.html for more information.
+    """
     print("Creating boto3 client for {}...".format(service))
     return boto3.client(service)
 
