@@ -13,7 +13,12 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
 - [X] Move aws-cli stuff to boto3
 - [ ] Allow user specification of the desired module to be built using alpaca
 ## MVP
-- [ ] Exception handling - retry for delete and create, and any control flow necessary. Always cleanup created resources regardless of success or failure.
+- [ ] Exception handling - retry for delete and create of all resources, and any control flow necessary. Always cleanup created resources regardless of success or failure. Make sure packaged specified is a valid PyPi package.
+    - [ ] Retry on delete for all resources
+    - [ ] Retry on create for all resources
+    - [ ] Control flow
+    - [ ] Always cleanup
+    - [ ] Valid PyPi package
 - [ ] Default behavior is to create an s3 bucket and IAM role, but also allow user to optionally specify a bucket and/or policy
     - [ ] s3 bucket
     - [ ] IAM role
