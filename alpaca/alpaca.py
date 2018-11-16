@@ -87,7 +87,7 @@ def main():
     iam.delete_role(iam_client)
     s3.delete_artifact(s3_client, bucket)
 
-    print("Exiting...")
+    print("SUCCESS")
 
 
 if __name__ == "__main__":

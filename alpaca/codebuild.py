@@ -61,7 +61,7 @@ def create_build_project(client, role, bucket, buildspec):
         /api/latest/reference/services
         /codebuild.html#CodeBuild.Client.create_project for more information.
     """
-    print("Creating build project...")
+    print("Creating CodeBuild project...")
     response = client.create_project(
         name='alpacaBuilder',
         source={
@@ -140,7 +140,7 @@ def build_artifact(client):
     Returns
     -------
     """
-    print("Starting build job...")
+    print("Submitting a build job for the specified package(s)...")
     response = client.start_build(projectName='alpacaBuilder')
     build_id = str(response.get('build').get('id'))
     print(">>Build ID is {}".format(build_id))

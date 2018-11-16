@@ -24,7 +24,7 @@ def download_artifact(resource, bucket, key='alpacaBuilder/alpaca.zip',
     Returns
     -------
     """
-    print("Downloading zip to {}...".format(local_path))
+    print("Downloading built package(s) to {}...".format(local_path))
     resource.meta.client.download_file(bucket, key, local_path)
     print("Download complete...")
 
