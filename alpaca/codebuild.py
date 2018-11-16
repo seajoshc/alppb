@@ -84,35 +84,64 @@ def create_build_project(client, role, bucket, buildspec):
 
 
 def delete_build_project(client):
-    """ Deletes an AWS CodeBuild project """
+    """
+    Deletes the Alpaca AWS CodeBuild project.
+
+    Parameters
+    ----------
+    client : botocore.client.codebuild
+        A boto3 client for CodeBuild.
+
+    Returns
+    -------
+    """
     print("Deleting build project and cleaning up...")
     client.delete_project(name="alpacaBuilder")
 
 
-def get_artifact_location(client, build_id):
-    """ Keeps checking until a build completes
-    and then gets location of the artifact """
+def wait_for_build_to_complete(client, build_id):
+    """
+    Keeps checking until a build completes.
+
+    Parameters
+    ----------
+    client : botocore.client.codebuild
+        A boto3 client for CodeBuild.
+
+    build_id : str
+        The ID of the AWS CodeBuild job to poll.
+
+    Returns
+    -------
+    """
     response = client.batch_get_builds(ids=[build_id])
     # batch_get_builds() will return an array with one element.
     status = str(response.get('builds')[0].get('buildStatus'))
     if status == 'SUCCEEDED':
         print("Build completed...")
-        # Build is done, return the artifact location.
-        return str(response.get('builds')[0].get('artifacts').get('location'))
+        return
+    # TODO add case when status is FAILED
     else:
-        print("Build {}, waiting 10 seconds...".format(status))
+        print(">>Build {}, waiting 10 seconds...".format(status))
         time.sleep(10)
         # Recursively call until the build is done.
-        return get_artifact_location(client, build_id)
+        return wait_for_build_to_complete(client, build_id)
 
 
 def build_artifact(client):
-    """ Start a build and get the location of the artifact """
+    """
+    Start a build and wait until it's done.
+
+    Parameters
+    ----------
+    client : botocore.client.codebuild
+        A boto3 client for CodeBuild.
+
+    Returns
+    -------
+    """
     print("Starting build job...")
     response = client.start_build(projectName='alpacaBuilder')
     build_id = str(response.get('build').get('id'))
-    print("Build ID is {}".format(build_id))
-    artifact_location = get_artifact_location(client, build_id)
-    print("Built module(s) located at {}".format(artifact_location))
-
-    return str(artifact_location)
+    print(">>Build ID is {}".format(build_id))
+    wait_for_build_to_complete(client, build_id)
