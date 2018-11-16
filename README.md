@@ -12,9 +12,10 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
 - [X] Add deletion of IAM role as part of cleanup
 - [X] Move aws-cli stuff to boto3
 - [X] Allow user specification of the desired module to be built using alpaca
-- [ ] Cleanup existing docstrings
-- [ ] Remove base64 stuff in iam.py as it obscures whats happening
-- [ ] Axe the examples dir
+- [X] Cleanup existing docstrings
+- [X] Remove base64 stuff in iam.py as it obscures whats happening
+- [X] Axe the examples dir
+- [ ] Allow user specification of the bucket with an optional argument of --bucket (bucket creation planned in MVP milestone)
 ## MVP
 - [ ] Exception handling - retry for delete and create of all resources, and any control flow necessary. Always cleanup created resources regardless of success or failure. Make sure packaged specified is a valid PyPi package.
     - [ ] Retry on delete for all resources
@@ -22,9 +23,8 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
     - [ ] Control flow
     - [ ] Always cleanup
     - [ ] Valid PyPi package
-- [ ] Default behavior is to create an s3 bucket and IAM role, but also allow user to optionally specify a bucket and/or policy
-    - [ ] s3 bucket
-    - [ ] IAM role
+- [ ] Try to create an s3 bucket if one isn't specified
+- [ ] Allow user to optionally specify an IAM role
 - [ ] One or more modules can be specified in one invocation of alpaca
 - [ ] Allow specification of a requirements.txt file to use as a list of all modules to build
 - [ ] Specify download location of the artifact
