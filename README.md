@@ -11,7 +11,10 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
 - [X] Add creation of IAM role for CodeBuild instead of using hardcoded, pre-built role
 - [X] Add deletion of IAM role as part of cleanup
 - [X] Move aws-cli stuff to boto3
-- [ ] Allow user specification of the desired module to be built using alpaca
+- [X] Allow user specification of the desired module to be built using alpaca
+- [ ] Cleanup existing docstrings
+- [ ] Remove base64 stuff in iam.py as it obscures whats happening
+- [ ] Axe the examples dir
 ## MVP
 - [ ] Exception handling - retry for delete and create of all resources, and any control flow necessary. Always cleanup created resources regardless of success or failure. Make sure packaged specified is a valid PyPi package.
     - [ ] Retry on delete for all resources
@@ -29,7 +32,6 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
 - [ ] Integration tests
 - [ ] Submit to PyPi and make into an executable
 - [ ] Dockerize and submit to Dockerhub
-- [ ] Better docstrings everywhere
 
 ## Exceptions
 ResourceAlreadyExistsException
