@@ -71,7 +71,7 @@ def main():
     bucket = 'rebukethe.net'
 
     # Create Alpaca resources.
-    role = iam.create_role(iam_client)
+    role = iam.create_role(iam_client, bucket)
     # TODO be smarter about checking if the role is ready
     print(">>Waiting 10 seconds for IAM Role propagation before continuing...")
     time.sleep(10)
