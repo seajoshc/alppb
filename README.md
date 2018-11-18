@@ -23,6 +23,7 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
     - [ ] Control flow
     - [ ] Always cleanup
     - [ ] Valid PyPi package
+    - [ ] Bucket and CodeBuild need to be in same region
 - [ ] Try to create an s3 bucket if one isn't specified
 - [ ] Allow user to optionally specify an IAM role
 - [ ] One or more modules can be specified in one invocation of alpaca
