@@ -9,9 +9,9 @@ __license__ = "MIT"
 import argparse
 import time
 import boto3
-import codebuild
-import iam
-import s3
+from . import codebuild
+from . import iam
+from . import s3
 
 
 def create_client(service):
