@@ -2,7 +2,7 @@
 If your AWS Lambda Python project has C extension modules (or dependencies that do), Alpaca will use AWS CodeBuild to build them on Amazon Linux and download them to your local machine for you. Simply unzip the downloaded package into your deployment bundle and upload to the AWS Lambda service.
 
 # TODO
-## Development
+## 0.1.0
 - [X] Foundation - create a CodeBuild project with hardcoded build that puts an artifact in s3
 - [X] Fix artifact so its a zip of the contents (excluding parent dir)
 - [X] Download the module locally to dir alpaca was run from
@@ -15,24 +15,26 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
 - [X] Cleanup existing docstrings
 - [X] Remove base64 stuff in iam.py as it obscures whats happening
 - [X] Axe the examples dir
-- [ ] Allow user specification of the bucket with an optional argument of --bucket (bucket creation planned in MVP milestone)
-## MVP
-- [ ] Exception handling - retry for delete and create of all resources, and any control flow necessary. Always cleanup created resources regardless of success or failure. Make sure packaged specified is a valid PyPi package.
+- [X] Allow user specification of the bucket
+## 1.0.0
+- [ ] Exception handling - retry for delete and create of all resources, and any control flow necessary. Always cleanup created resources regardless of success or failure. Make sure package specified is a valid PyPi package.
     - [ ] Retry on delete for all resources
     - [ ] Retry on create for all resources
     - [ ] Control flow
     - [ ] Always cleanup
     - [ ] Valid PyPi package
     - [ ] Bucket and CodeBuild need to be in same region
-- [ ] Try to create an s3 bucket if one isn't specified
-- [ ] Allow user to optionally specify an IAM role
-- [ ] One or more modules can be specified in one invocation of alpaca
-- [ ] Allow specification of a requirements.txt file to use as a list of all modules to build
-- [ ] Specify download location of the artifact
 - [ ] Unit tests
 - [ ] Integration tests
 - [ ] Submit to PyPi and make into an executable
 - [ ] Dockerize and submit to Dockerhub
+## v1.1
+- [ ] Create an s3 bucket when an arg is specified
+- [ ] Allow user to optionally specify an IAM role
+- [ ] One or more modules can be specified in one invocation of alpaca
+- [ ] Allow specification of a requirements.txt file to use as a list of all modules to build
+- [ ] Specify download location of the artifact
+
 
 ## Exceptions
 ResourceAlreadyExistsException
