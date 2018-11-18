@@ -52,6 +52,39 @@ def create_resource(service):
     return boto3.resource(service)
 
 
+def force_cleanup(codebuild_client, iam_client):
+    """
+    Deletes the IAM Role and CodeBuild project Alpaca creates. This is useful
+    for when Alpaca doesn't gracefully exit and dangling resources need to be
+    destroyed. This will not delete anything except the IAM Role named
+    \"alpacaBuilderRole\" and the CodeBuild project named \"alpacaBuilder\".
+    Specifically, this will not delete any S3 buckets or objects in S3.
+
+    Parameters
+    ----------
+    codebuild_client : botocore.client.codebuild
+        A boto3 client for CodeBuild.
+
+    iam_client : botocore.client.iam
+        A boto3 client for IAM.
+
+    Returns
+    -------
+    """
+    print("Forcing a cleanup...")
+    try:
+        codebuild.delete_build_project(codebuild_client)
+        print(">>Deleted CodeBuild project...")
+    except:
+        print(">>No CodeBuild project to delete, skipping...")
+
+    try:
+        iam.delete_role(iam_client)
+        print(">>Deleted IAM Role...")
+    except:
+        print(">>No IAM Role to delete, skipping...")
+
+
 def main():
     """ Main entry point of the app """
     print("Starting alpaca...")
@@ -60,8 +93,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("package", help="The PyPi package you want to build.")
     parser.add_argument("bucket", help="Name of the S3 bucket to use.")
+    parser.add_argument("-c", "--cleanup",
+                        help="Force a cleanup of any and all Alpaca resources"
+                        " in AWS. Useful if Alpaca did not gracefully exit.",
+                        action="store_true")
     args = parser.parse_args()
-    bucket = str(args.bucket)
 
     # Create boto3 clients/resources used below.
     iam_client = create_client('iam')
@@ -69,7 +105,12 @@ def main():
     s3_resource = create_resource('s3')
     s3_client = create_client('s3')
 
+    # Handle --cleanup.
+    if args.cleanup:
+        force_cleanup(codebuild_client, iam_client)
+
     # Create Alpaca resources.
+    bucket = str(args.bucket)
     role = iam.create_role(iam_client, bucket)
     # TODO be smarter about checking if the role is ready
     print(">>Waiting 10 seconds for IAM Role propagation before continuing...")
