@@ -59,16 +59,15 @@ def main():
     # Parsing arguments.
     parser = argparse.ArgumentParser()
     parser.add_argument("package", help="The PyPi package you want to build.")
+    parser.add_argument("bucket", help="Name of the S3 bucket to use.")
     args = parser.parse_args()
+    bucket = str(args.bucket)
 
     # Create boto3 clients/resources used below.
     iam_client = create_client('iam')
     codebuild_client = create_client('codebuild')
     s3_resource = create_resource('s3')
     s3_client = create_client('s3')
-
-    # Hardcoded bucket during development.
-    bucket = 'rebukethe.net'
 
     # Create Alpaca resources.
     role = iam.create_role(iam_client, bucket)
