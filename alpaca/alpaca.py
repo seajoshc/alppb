@@ -9,16 +9,15 @@ __license__ = "MIT"
 import argparse
 import time
 import boto3
+from botocore.exceptions import NoRegionError
 from . import codebuild
 from . import iam
 from . import s3
 
 
-def preflight_check():
+def check_for_boto_credentials():
     """
-    Checks if all pre-requisites are in place before trying to run Alpaca.
-    Checks include:
-        - Are boto3 credentials available?
+    Checks if credentials for boto3 to use are available.
 
     Parameters
     ----------
@@ -34,7 +33,7 @@ def preflight_check():
         exit(1)
 
 
-def create_client(service):
+def create_client(service, region):
     """
     Creates a boto3 client object for the specified service.
 
@@ -50,10 +49,18 @@ def create_client(service):
         /clients.html for more information.
     """
     print("Creating boto3 client for {}...".format(service))
-    return boto3.client(service)
+    try:
+        return boto3.client(service, region_name=region)
+    except NoRegionError:
+        print("ERROR: boto3 cannot find a default profile to use. Try running "
+              "`aws configure`. To see how boto3 loads configuration, see: "
+              "https://boto3.amazonaws.com/v1/documentation/api/latest/guide/"
+              "configuration.html#configuring-credentials"
+        )
+        exit(1)
 
 
-def create_resource(service):
+def create_resource(service, region):
     """
     Creates a boto3 resource object for the specified service.
 
@@ -69,26 +76,34 @@ def create_resource(service):
         /resources.html for more information.
     """
     print("Creating boto3 resource for {}...".format(service))
-    return boto3.resource(service)
+    return boto3.resource(service, region_name=region)
 
 
 def main():
     """ Main entry point of the app """
     print("Starting alpaca...")
-    preflight_check()
+    check_for_boto_credentials()
 
     # Parsing arguments.
     parser = argparse.ArgumentParser()
     parser.add_argument("package", help="The PyPi package you want to build.")
-    parser.add_argument("bucket", help="Name of the S3 bucket to use.")
+    parser.add_argument("bucket", help="Name of the S3 bucket to use.", 
+                        type=str)
+    parser.add_argument("--region", help="The AWS region to use.", type=str)
     args = parser.parse_args()
-    bucket = str(args.bucket)
+    bucket = args.bucket
+    # If region is None boto3 will determine the region to use. See more at,
+    # https://boto3.amazonaws.com/v1/documentation/api/latest/guide
+    # /configuration.html#configuring-credentials
+    region = args.region
+
+    # Try to use boto3 profile default region if region arg wasn't used.
 
     # Create boto3 clients/resources used below.
-    iam_client = create_client('iam')
-    codebuild_client = create_client('codebuild')
-    s3_resource = create_resource('s3')
-    s3_client = create_client('s3')
+    iam_client = create_client('iam', region)
+    codebuild_client = create_client('codebuild', region)
+    s3_resource = create_resource('s3', region)
+    s3_client = create_client('s3', region)
 
     # Create Alpaca resources.
     role = iam.create_role(iam_client, bucket)
