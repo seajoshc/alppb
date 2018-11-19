@@ -91,20 +91,21 @@ def main():
 
     # Parsing arguments.
     parser = argparse.ArgumentParser()
-    parser.add_argument("package", help="The PyPi package you want to build.")
+    parser.add_argument("package", help="The PyPi package you want to build.",
+                        type=str)
     parser.add_argument("bucket", help="Name of the S3 bucket to use.",
                         type=str)
     parser.add_argument("--region", help="The AWS region to use.", type=str,
                         choices=boto3.session.Session().get_available_regions(
                             'codebuild'))
     args = parser.parse_args()
+
+    package = args.package
     bucket = args.bucket
     # If region is None boto3 will determine the region to use. See more at,
     # https://boto3.amazonaws.com/v1/documentation/api/latest/guide
     # /configuration.html#configuring-credentials
     region = args.region
-
-    # Try to use boto3 profile default region if region arg wasn't used.
 
     # Create boto3 clients/resources used below.
     iam_client = create_client('iam', region)
@@ -112,9 +113,22 @@ def main():
     s3_resource = create_resource('s3', region)
     s3_client = create_client('s3', region)
 
+    # Check if S3 bucket is in the same region as target CodeBuild region.
+    bucket_region = s3.bucket_region(s3_client, bucket)
+    codebuild_region = codebuild_client._client_config.__dict__\
+        .get('_user_provided_options').get('region_name')
+    if bucket_region != codebuild_region:
+        print("ERROR: Bucket and CodeBuild project must be in the same "
+              "region. Bucket is in {}, but the region being used for "
+              "CodeBuild is {}. Recommended Action: Set the --region flag "
+              "to {}. e.g. `alpaca {} {} --region {}`".format(
+                bucket_region, codebuild_region, bucket_region, package,
+                bucket, bucket_region))
+        exit(1)
+
     # Create Alpaca resources.
     role = iam.create_role(iam_client, bucket)
-    buildspec = codebuild.generate_buildspec(str(args.package))
+    buildspec = codebuild.generate_buildspec(package)
     codebuild.create_build_project(codebuild_client, role, bucket, buildspec)
     codebuild.build_artifact(codebuild_client)
 
