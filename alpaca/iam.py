@@ -22,22 +22,28 @@ def create_role(client, bucket):
         ARN of the newly created IAM Role.
     """
     print("Creating IAM Role...")
-    response = client.create_role(
-        RoleName='alpacaBuilderRole',
-        AssumeRolePolicyDocument=json.dumps({
-            "Version": "2012-10-17",
-            "Statement": [
-                {
-                    "Effect": "Allow",
-                    "Principal": {
-                        "Service": "codebuild.amazonaws.com"
-                    },
-                    "Action": "sts:AssumeRole"
-                }
-            ]
-        }),
-        Description='This role is used by https://github.com/irlrobot/alpaca',
-    )
+    try:
+        response = client.create_role(
+            RoleName='alpacaBuilderRole',
+            AssumeRolePolicyDocument=json.dumps({
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": "codebuild.amazonaws.com"
+                        },
+                        "Action": "sts:AssumeRole"
+                    }
+                ]
+            }),
+            Description="This role is used by "
+                        "https://github.com/irlrobot/alpaca",
+        )
+    except client.exceptions.EntityAlreadyExistsException:
+        print(">>alpacaBuilderRole already exists, skipping...")
+        response = client.get_role(RoleName='alpacaBuilderRole')
+
     add_role_policy(client, bucket)
 
     return str(response.get('Role').get('Arn'))
