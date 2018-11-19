@@ -94,7 +94,9 @@ def main():
     parser.add_argument("package", help="The PyPi package you want to build.")
     parser.add_argument("bucket", help="Name of the S3 bucket to use.",
                         type=str)
-    parser.add_argument("--region", help="The AWS region to use.", type=str)
+    parser.add_argument("--region", help="The AWS region to use.", type=str,
+                        choices=boto3.session.Session().get_available_regions(
+                            'codebuild'))
     args = parser.parse_args()
     bucket = args.bucket
     # If region is None boto3 will determine the region to use. See more at,
