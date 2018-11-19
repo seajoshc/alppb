@@ -62,23 +62,43 @@ def create_build_project(client, role, bucket, buildspec):
         /codebuild.html#CodeBuild.Client.create_project for more information.
     """
     print("Creating CodeBuild project...")
-    response = client.create_project(
-        name='alpacaBuilder',
-        source={
-            'type': 'NO_SOURCE',
-            'buildspec': buildspec,
-        },
-        artifacts={
-            'type': 'S3',
-            'location': bucket,
-        },
-        environment={
-            'type': 'LINUX_CONTAINER',
-            'image': 'irlrobot/amazonlinux1:latest',
-            'computeType': 'BUILD_GENERAL1_SMALL',
-        },
-        serviceRole=role,
-    )
+    try:
+        response = client.create_project(
+            name='alpacaBuilder',
+            source={
+                'type': 'NO_SOURCE',
+                'buildspec': buildspec,
+            },
+            artifacts={
+                'type': 'S3',
+                'location': bucket,
+            },
+            environment={
+                'type': 'LINUX_CONTAINER',
+                'image': 'irlrobot/amazonlinux1:latest',
+                'computeType': 'BUILD_GENERAL1_SMALL',
+            },
+            serviceRole=role,
+        )
+    except client.exceptions.ResourceAlreadyExistsException:
+        print(">>alpacaBuilder project already exists, overwriting...")
+        response = client.update_project(
+            name='alpacaBuilder',
+            source={
+                'type': 'NO_SOURCE',
+                'buildspec': buildspec,
+            },
+            artifacts={
+                'type': 'S3',
+                'location': bucket,
+            },
+            environment={
+                'type': 'LINUX_CONTAINER',
+                'image': 'irlrobot/amazonlinux1:latest',
+                'computeType': 'BUILD_GENERAL1_SMALL',
+            },
+            serviceRole=role,
+        )
 
     return response
 
