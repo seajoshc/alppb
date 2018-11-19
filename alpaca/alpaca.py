@@ -55,8 +55,7 @@ def create_client(service, region):
         print("ERROR: boto3 cannot find a default profile to use. Try running "
               "`aws configure`. To see how boto3 loads configuration, see: "
               "https://boto3.amazonaws.com/v1/documentation/api/latest/guide/"
-              "configuration.html#configuring-credentials"
-        )
+              "configuration.html#configuring-credentials")
         exit(1)
 
 
@@ -76,7 +75,14 @@ def create_resource(service, region):
         /resources.html for more information.
     """
     print("Creating boto3 resource for {}...".format(service))
-    return boto3.resource(service, region_name=region)
+    try:
+        return boto3.resource(service, region_name=region)
+    except NoRegionError:
+        print("ERROR: boto3 cannot find a default profile to use. Try running "
+              "`aws configure`. To see how boto3 loads configuration, see: "
+              "https://boto3.amazonaws.com/v1/documentation/api/latest/guide/"
+              "configuration.html#configuring-credentials")
+        exit(1)
 
 
 def main():
@@ -87,7 +93,7 @@ def main():
     # Parsing arguments.
     parser = argparse.ArgumentParser()
     parser.add_argument("package", help="The PyPi package you want to build.")
-    parser.add_argument("bucket", help="Name of the S3 bucket to use.", 
+    parser.add_argument("bucket", help="Name of the S3 bucket to use.",
                         type=str)
     parser.add_argument("--region", help="The AWS region to use.", type=str)
     args = parser.parse_args()
