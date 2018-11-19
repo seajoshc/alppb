@@ -17,13 +17,11 @@ If your AWS Lambda Python project has C extension modules (or dependencies that 
 - [X] Axe the examples dir
 - [X] Allow user specification of the bucket
 ## 1.0.0
-- [ ] Exception handling - retry for delete and create of all resources, and any control flow necessary. Always cleanup created resources regardless of success or failure. Make sure package specified is a valid PyPi package.
-    - [ ] Retry on delete for all resources
-    - [ ] Retry on create for all resources
-    - [ ] Control flow
-    - [ ] Always cleanup
+- [ ] Exception handling
+    - [X] Update and overwrite if resources already exist
+    - [X] pre-req checking
     - [ ] Valid PyPi package
-    - [ ] Bucket and CodeBuild need to be in same region
+    - [X] Bucket and CodeBuild need to be in same region
 - [ ] Unit tests
 - [ ] Integration tests
 - [ ] Submit to PyPi and make into an executable
