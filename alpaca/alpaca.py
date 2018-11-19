@@ -7,7 +7,6 @@ __author__ = "Josh Campbell"
 __version__ = "0.1.0"
 __license__ = "MIT"
 import argparse
-import time
 import boto3
 from botocore.exceptions import NoRegionError
 from . import codebuild
@@ -113,9 +112,6 @@ def main():
 
     # Create Alpaca resources.
     role = iam.create_role(iam_client, bucket)
-    # TODO be smarter about checking if the role is ready
-    print(">>Waiting 10 seconds for IAM Role propagation before continuing...")
-    time.sleep(10)
     buildspec = codebuild.generate_buildspec(str(args.package))
     codebuild.create_build_project(codebuild_client, role, bucket, buildspec)
     codebuild.build_artifact(codebuild_client)
