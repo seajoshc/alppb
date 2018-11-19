@@ -4,7 +4,7 @@ Alpaca
 Builds Python modules on Amazon Linux using AWS CodeBuild and downloads them.
 """
 __author__ = "Josh Campbell"
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __license__ = "MIT"
 import argparse
 import boto3
