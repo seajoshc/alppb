@@ -14,6 +14,26 @@ from . import iam
 from . import s3
 
 
+def preflight_check():
+    """
+    Checks if all pre-requisites are in place before trying to run Alpaca.
+    Checks include:
+        - Are boto3 credentials available?
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+    """
+    session = boto3.Session()
+    credentials = session.get_credentials()
+    if credentials is None:
+        print("ERROR: boto3 credentials missing. "
+              "Does ~/.aws/credentials exist?")
+        exit(1)
+
+
 def create_client(service):
     """
     Creates a boto3 client object for the specified service.
@@ -55,6 +75,7 @@ def create_resource(service):
 def main():
     """ Main entry point of the app """
     print("Starting alpaca...")
+    preflight_check()
 
     # Parsing arguments.
     parser = argparse.ArgumentParser()
