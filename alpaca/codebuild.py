@@ -141,11 +141,17 @@ def wait_for_build_to_complete(client, build_id):
         print("Build completed...")
         return
     # TODO add case when status is FAILED
-    else:
+    elif status == 'IN_PROGRESS':
         print(">>Build {}, waiting 10 seconds...".format(status))
         time.sleep(10)
         # Recursively call until the build is done.
         return wait_for_build_to_complete(client, build_id)
+    else:
+        print("ERROR: Build did not complete, status is: {}. Check "
+              "the AWS console for more information on {}".format(
+                  status, build_id
+              ))
+        exit(1)
 
 
 def build_artifact(client):
