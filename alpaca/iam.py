@@ -2,6 +2,7 @@
 Administration of AWS IAM Resources through a boto3 client.
 """
 import json
+import time
 
 
 def create_role(client, bucket):
@@ -45,6 +46,10 @@ def create_role(client, bucket):
         response = client.get_role(RoleName='alpacaBuilderRole')
 
     add_role_policy(client, bucket)
+
+    # TODO be smarter about checking if the role is ready
+    print(">>Waiting 10 seconds for policy propagation before continuing...")
+    time.sleep(10)
 
     return str(response.get('Role').get('Arn'))
 
