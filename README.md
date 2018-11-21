@@ -22,6 +22,7 @@ If your AWS Lambda Python project has package(s) with C extension modules (or de
     - [X] pre-req checking
     - [ ] Valid PyPi package
     - [X] Bucket and CodeBuild need to be in same region
+    - [ ] Bucket exists (NoSuchBucket)
 - [ ] Unit tests
 - [ ] Integration tests
 - [ ] Package and Submit to PyPi
