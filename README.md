@@ -28,6 +28,7 @@ If your AWS Lambda Python project has package(s) with C extension modules (or de
 - [ ] Dockerize and submit to Dockerhub
 - [ ] Make CodeBuild Docker image details more clear and document
 - [ ] Add verbosity levels
+- [ ] Add Sphinx docs
 ## v1.1
 - [ ] Create an s3 bucket when an arg is specified
 - [ ] Allow user to optionally specify an IAM role
