@@ -8,8 +8,8 @@ import io
 import os
 import sys
 from shutil import rmtree
-
 from setuptools import find_packages, setup, Command
+
 
 # Package meta-data.
 NAME = "alpaca"
@@ -19,17 +19,12 @@ URL = "https://github.com/irlrobot/alpaca/"
 EMAIL = "josh@userdel.com"
 AUTHOR = "Josh Campbell"
 REQUIRES_PYTHON = ">=3.6.0"
-VERSION = None  # alpaca/__version__.py
-
 # What packages are required for this module to be executed?
 REQUIRED = [
     "boto3", "pyyaml",
 ]
-
 # What packages are optional?
-EXTRAS = {
-
-}
+EXTRAS = {}
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -43,17 +38,14 @@ except FileNotFoundError:
 
 # Load the package's __version__.py module as a dictionary.
 about = {}
-if not VERSION:
-    with open(os.path.join(here, NAME, '__version__.py')) as f:
+with open(os.path.join(here, NAME, '__version__.py')) as f:
         exec(f.read(), about)
-else:
-    about['__version__'] = VERSION
 
 
 class UploadCommand(Command):
-    """Support setup.py upload."""
+    """ Builds a package, publishes to PyPi, and pushes a git tag """
 
-    description = 'Build and publish the package.'
+    description = "Build and publish the package."
     user_options = []
 
     @staticmethod
@@ -88,6 +80,37 @@ class UploadCommand(Command):
         sys.exit()
 
 
+class BuildCommand(Command):
+    """ Builds a package """
+
+    description = "Build a package."
+    user_options = []
+
+    @staticmethod
+    def status(s):
+        """Prints things in bold."""
+        print('\033[1m{0}\033[0m'.format(s))
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        try:
+            self.status('Removing previous builds…')
+            rmtree(os.path.join(here, 'dist'))
+        except OSError:
+            pass
+
+        self.status('Building Source and Wheel (universal) distribution…')
+        os.system('{0} setup.py sdist bdist_wheel --universal'
+                  .format(sys.executable))
+
+        sys.exit()
+
+
 # Where the magic happens:
 setup(
     name=NAME,
@@ -103,9 +126,9 @@ setup(
     # If your package is a single module, use this instead of 'packages':
     # py_modules=['mypackage'],
 
-    # entry_points={
-    #     'console_scripts': ['mycli=mymodule:cli'],
-    # },
+    entry_points={
+        'console_scripts': ['alpaca=alpaca.alpaca:main'],
+    },
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     include_package_data=True,
