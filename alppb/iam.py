@@ -25,7 +25,7 @@ def create_role(client, bucket):
     print("Creating IAM Role...")
     try:
         response = client.create_role(
-            RoleName='alpacaBuilderRole',
+            RoleName='alppbBuilderRole',
             AssumeRolePolicyDocument=json.dumps({
                 "Version": "2012-10-17",
                 "Statement": [
@@ -39,11 +39,11 @@ def create_role(client, bucket):
                 ]
             }),
             Description="This role is used by "
-                        "https://github.com/irlrobot/alpaca",
+                        "https://github.com/irlrobot/alppb",
         )
     except client.exceptions.EntityAlreadyExistsException:
-        print(">>alpacaBuilderRole already exists, skipping...")
-        response = client.get_role(RoleName='alpacaBuilderRole')
+        print(">>alppbBuilderRole already exists, skipping...")
+        response = client.get_role(RoleName='alppbBuilderRole')
 
     add_role_policy(client, bucket)
 
@@ -125,8 +125,8 @@ def add_role_policy(client, bucket):
     """
     print(">>Attaching Policy to the the IAM Role...")
     client.put_role_policy(
-        RoleName='alpacaBuilderRole',
-        PolicyName='alpacaBuilderPolicy',
+        RoleName='alppbBuilderRole',
+        PolicyName='alppbBuilderPolicy',
         PolicyDocument=generate_role_policy(bucket),
     )
 
@@ -147,7 +147,7 @@ def delete_role(client):
     # AWS API wants all role policies deleted before the role itself.
     # TODO get all policies on the role and then delete in case it was modified
     client.delete_role_policy(
-        RoleName='alpacaBuilderRole',
-        PolicyName='alpacaBuilderPolicy'
+        RoleName='alppbBuilderRole',
+        PolicyName='alppbBuilderPolicy'
     )
-    client.delete_role(RoleName='alpacaBuilderRole')
+    client.delete_role(RoleName='alppbBuilderRole')

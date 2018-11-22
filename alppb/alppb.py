@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Alpaca
+alppb
 Builds Python modules on Amazon Linux using AWS CodeBuild and downloads them.
 """
 __author__ = "Josh Campbell"
@@ -86,7 +86,7 @@ def create_resource(service, region):
 
 def main():
     """ Main entry point of the app """
-    print("Starting alpaca...")
+    print("Starting alppb...")
     check_for_boto_credentials()
 
     # Parsing arguments.
@@ -121,12 +121,12 @@ def main():
         print("ERROR: Bucket and CodeBuild project must be in the same "
               "region. Bucket is in {}, but the region being used for "
               "CodeBuild is {}. Recommended Action: Set the --region flag "
-              "to {}. e.g. `alpaca {} {} --region {}`".format(
+              "to {}. e.g. `alppb {} {} --region {}`".format(
                 bucket_region, codebuild_region, bucket_region, package,
                 bucket, bucket_region))
         exit(1)
 
-    # Create Alpaca resources.
+    # Create alppb resources.
     role = iam.create_role(iam_client, bucket)
     buildspec = codebuild.generate_buildspec(package)
     codebuild.create_build_project(codebuild_client, role, bucket, buildspec)

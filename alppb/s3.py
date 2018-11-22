@@ -3,10 +3,10 @@ Administration of Amazon S3 Resources through a boto3 client.
 """
 
 
-def download_artifact(resource, bucket, key='alpacaBuilder/alpaca.zip',
-                      local_path='alpaca.zip'):
+def download_artifact(resource, bucket, key='alppbBuilder/alppb.zip',
+                      local_path='alppb.zip'):
     """
-    Fetches the artifact from Amazon S3 built by Alpaca .
+    Fetches the artifact from Amazon S3 built by alppb .
 
     Parameters
     ----------
@@ -16,10 +16,10 @@ def download_artifact(resource, bucket, key='alpacaBuilder/alpaca.zip',
         Name of the bucket the artifact exists in.
     key: str
         The S3 key of the artifact to download from the bucket. Defaults to
-        "alpacaBuilder/alpaca.zip".
+        "alppbBuilder/alppb.zip".
     local_path: str
         The local path where the artifact will be downloaded. Defaults to the
-        current directory Alpaca is being run from.
+        current directory alppb is being run from.
 
     Returns
     -------
@@ -29,9 +29,9 @@ def download_artifact(resource, bucket, key='alpacaBuilder/alpaca.zip',
     print("Download complete...")
 
 
-def delete_artifact(client, bucket, key='alpacaBuilder/alpaca.zip'):
+def delete_artifact(client, bucket, key='alppbBuilder/alppb.zip'):
     """
-    Deletes the artifact from Amazon S3 built by Alpaca.
+    Deletes the artifact from Amazon S3 built by alppb.
 
     Parameters
     ----------
@@ -41,7 +41,7 @@ def delete_artifact(client, bucket, key='alpacaBuilder/alpaca.zip'):
         Name of the bucket the artifact exists in.
     key: str
         The S3 key of the artifact to delete from the bucket. Defaults to
-        "alpacaBuilder/alpaca.zip".
+        "alppbBuilder/alppb.zip".
 
     Returns
     -------
