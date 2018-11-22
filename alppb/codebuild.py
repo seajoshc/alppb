@@ -25,15 +25,15 @@ def generate_buildspec(package):
         "phases": {
             "build": {
                 "commands": [
-                    "pip-3.6 install {} -t alpaca".format(package),
-                    "cd alpaca/",
-                    "zip -r ../alpaca.zip *"
+                    "pip-3.6 install {} -t alppb".format(package),
+                    "cd alppb/",
+                    "zip -r ../alppb.zip *"
                 ]
             }
         },
         "artifacts": {
             "files": [
-                "alpaca.zip"
+                "alppb.zip"
             ]
         }
     })
@@ -64,7 +64,7 @@ def create_build_project(client, role, bucket, buildspec):
     print("Creating CodeBuild project...")
     try:
         response = client.create_project(
-            name='alpacaBuilder',
+            name='alppbBuilder',
             source={
                 'type': 'NO_SOURCE',
                 'buildspec': buildspec,
@@ -81,9 +81,9 @@ def create_build_project(client, role, bucket, buildspec):
             serviceRole=role,
         )
     except client.exceptions.ResourceAlreadyExistsException:
-        print(">>alpacaBuilder project already exists, overwriting...")
+        print(">>alppbBuilder project already exists, overwriting...")
         response = client.update_project(
-            name='alpacaBuilder',
+            name='alppbBuilder',
             source={
                 'type': 'NO_SOURCE',
                 'buildspec': buildspec,
@@ -105,7 +105,7 @@ def create_build_project(client, role, bucket, buildspec):
 
 def delete_build_project(client):
     """
-    Deletes the Alpaca AWS CodeBuild project.
+    Deletes the alppb AWS CodeBuild project.
 
     Parameters
     ----------
@@ -116,7 +116,7 @@ def delete_build_project(client):
     -------
     """
     print("Deleting CodeBuild project...")
-    client.delete_project(name="alpacaBuilder")
+    client.delete_project(name="alppbBuilder")
 
 
 def wait_for_build_to_complete(client, build_id):
@@ -167,7 +167,7 @@ def build_artifact(client):
     -------
     """
     print("Submitting a build job for the specified package(s)...")
-    response = client.start_build(projectName='alpacaBuilder')
+    response = client.start_build(projectName='alppbBuilder')
     build_id = str(response.get('build').get('id'))
     print(">>Build ID is {}".format(build_id))
     wait_for_build_to_complete(client, build_id)

@@ -1,17 +1,19 @@
-# Alpaca
-If your AWS Lambda Python project has package(s) with C extension modules (or dependencies that do), Alpaca will use AWS CodeBuild to build the package(s) on Amazon Linux and download them to your local machine for you. Simply unzip the downloaded package(s) into your deployment bundle and upload to the AWS Lambda service.
+# Amazon Linux Python Package Builder (alppb)
+alppb builds Python packages using the same version of Amazon Linux that the AWS Lambda service uses. Using alppb helps guarantee that any PyPi package your AWS Lambda app depends on will run properly.
+
+Why is this a problem that needs to be solved? AWS Lambda requires you to package up your Python project along with all of its dependencies in order to run. If your AWS Lambda Python project has package(s) with C extension modules (or dependencies that do), you will need to build them on Amazon Linux for your app to work. alppb uses the AWS CodeBuild service ([perpetual free tier includes 100 build minutes per month](https://aws.amazon.com/codebuild/pricing/)) to build the package(s) on Amazon Linux and download them to your local machine for you. Simply unzip the downloaded package(s) into your deployment bundle and upload to the AWS Lambda service.
 
 # TODO
 ## Pre 1.0.0
 - [X] Foundation - create a CodeBuild project with hardcoded build that puts an artifact in s3
 - [X] Fix artifact so its a zip of the contents (excluding parent dir)
-- [X] Download the module locally to dir alpaca was run from
+- [X] Download the module locally to dir alppb was run from
 - [X] Move codebuild stuff to a module
 - [X] Delete the artifact from s3 as part of cleanup
 - [X] Add creation of IAM role for CodeBuild instead of using hardcoded, pre-built role
 - [X] Add deletion of IAM role as part of cleanup
 - [X] Move aws-cli stuff to boto3
-- [X] Allow user specification of the desired module to be built using alpaca
+- [X] Allow user specification of the desired module to be built using alppb
 - [X] Cleanup existing docstrings
 - [X] Remove base64 stuff in iam.py as it obscures whats happening
 - [X] Axe the examples dir
@@ -27,11 +29,11 @@ If your AWS Lambda Python project has package(s) with C extension modules (or de
 - [ ] Integration tests
 - [ ] Package and Submit to PyPi
 - [ ] Dockerize and submit to Dockerhub
-- [ ] Make CodeBuild Docker image details more clear and document
+- [ ] Make CodeBuild Docker image details more clear and document, also match boto version used
 - [ ] Add verbosity levels
 - [ ] Add Sphinx docs
 ## Planned
-- [ ] One or more modules can be specified in one invocation of alpaca
+- [ ] One or more modules can be specified in one invocation of alppb
 - [ ] Allow specification of a requirements.txt file to use as a list of all modules to build
 - [ ] Specify download location of the artifact
 - [ ] Create an s3 bucket when an arg is specified
@@ -39,6 +41,10 @@ If your AWS Lambda Python project has package(s) with C extension modules (or de
 - [ ] Specify the Python version that should be used to build the package (choices come from supported AWS Lambda versions)
 
 # FAQs
-1) Where does the name Alpaca come from?
+1) Why AWS CodeBuild? Why not X instead?
 
-When I was first thinking about this project, I was caling it the "Amazon Linux Python Application Compiler". I immediately noticed the acronym for that, ALPAC, was pretty close to Alpaca. It stuck with me, so I decided to keep it :)
+AWS CodeBuild has a perpetual free tier and it's super easy to spin up, and teardown, a build job. Further, we can easily specify various Docker images to use for the build that match the AWS Lambda environment. I will likely add support for other build methods/services. If you have a suggestion, please open an issue or contact me on Twitter [@irlrobot](https://twitter.com/irlrobot).
+
+2) What image is being used for CodeBuild? Can I inspect the image being used for the build?
+
+The final image for 1.0.0 needs to be created, but the project is currently using https://hub.docker.com/r/irlrobot/amazonlinux1/. The Dockerfile can be seen here: https://github.com/irlrobot/dockerfiles/blob/master/amazonlinux1/Dockerfile. Again, this is a work in progress and will be cleaned up soon. AWS Lambda Python environment details can be seen here: https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html.

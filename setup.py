@@ -12,10 +12,10 @@ from setuptools import find_packages, setup, Command
 
 
 # Package meta-data.
-NAME = "alpaca"
+NAME = "alppb"
 DESCRIPTION = "Compiles Python packages on Amazon Linux to ensure their "\
               "compatability when used with AWS Lambda."
-URL = "https://github.com/irlrobot/alpaca/"
+URL = "https://github.com/irlrobot/alppb/"
 EMAIL = "josh@userdel.com"
 AUTHOR = "Josh Campbell"
 REQUIRES_PYTHON = ">=3.6.0"
@@ -127,7 +127,7 @@ setup(
     # py_modules=['mypackage'],
 
     entry_points={
-        'console_scripts': ['alpaca=alpaca.alpaca:main'],
+        'console_scripts': ['alppb=alppb.alppb:main'],
     },
     install_requires=REQUIRED,
     extras_require=EXTRAS,
