@@ -2,7 +2,7 @@
 If your AWS Lambda Python project has package(s) with C extension modules (or dependencies that do), Alpaca will use AWS CodeBuild to build the package(s) on Amazon Linux and download them to your local machine for you. Simply unzip the downloaded package(s) into your deployment bundle and upload to the AWS Lambda service.
 
 # TODO
-## 0.1.0
+## Pre 1.0.0
 - [X] Foundation - create a CodeBuild project with hardcoded build that puts an artifact in s3
 - [X] Fix artifact so its a zip of the contents (excluding parent dir)
 - [X] Download the module locally to dir alpaca was run from
@@ -30,12 +30,13 @@ If your AWS Lambda Python project has package(s) with C extension modules (or de
 - [ ] Make CodeBuild Docker image details more clear and document
 - [ ] Add verbosity levels
 - [ ] Add Sphinx docs
-## v1.1
-- [ ] Create an s3 bucket when an arg is specified
-- [ ] Allow user to optionally specify an IAM role
+## Planned
 - [ ] One or more modules can be specified in one invocation of alpaca
 - [ ] Allow specification of a requirements.txt file to use as a list of all modules to build
 - [ ] Specify download location of the artifact
+- [ ] Create an s3 bucket when an arg is specified
+- [ ] Allow user to optionally specify an IAM role
+- [ ] Specify the Python version that should be used to build the package (choices come from supported AWS Lambda versions)
 
 # FAQs
 1) Where does the name Alpaca come from?
