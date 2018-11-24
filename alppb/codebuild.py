@@ -22,7 +22,7 @@ def determine_image(py_version):
     """
     if py_version == "2.7":
         return "irlrobot/alppb-python27"
-    if py_version == "3.6" or None:
+    if py_version == "3.6" or "None":
         return "irlrobot/alppb-python36"
     if py_version == "3.7":
         return "irlrobot/alppb-python37"
@@ -48,7 +48,7 @@ def pip_to_use(py_version):
     """
     if py_version == "2.7":
         return "pip-2.7"
-    if py_version == "3.6" or None:
+    if py_version == "3.6" or "None":
         return "pip-3.6"
     if py_version == "3.7":
         return "/usr/local/bin/pip3.7"
