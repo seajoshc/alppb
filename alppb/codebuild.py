@@ -22,7 +22,7 @@ def determine_image(py_version):
     """
     if py_version == "2.7":
         return "irlrobot/alppb-python27"
-    if py_version == "3.6" or "None":
+    if py_version == ("3.6" or "None"):
         return "irlrobot/alppb-python36"
     if py_version == "3.7":
         return "irlrobot/alppb-python37"
