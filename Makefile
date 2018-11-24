@@ -4,7 +4,10 @@ init:
 	pip install -r requirements_dev.txt; \
 
 test:
-	py.test tests
+	pytest tests/ --ignore=tests/integration
+
+integration:
+	pytest tests/
 
 pypi:
 	python setup.py upload
