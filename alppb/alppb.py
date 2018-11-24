@@ -84,12 +84,8 @@ def create_resource(service, region):
         exit(1)
 
 
-def main():
-    """ Main entry point of the app """
-    print("Starting alppb...")
-    check_for_boto_credentials()
-
-    # Parsing arguments.
+def parse_args():
+    """ Setup ArgumentParser """
     parser = argparse.ArgumentParser()
     parser.add_argument("package", help="The PyPi package you want to build.",
                         type=str)
@@ -98,14 +94,27 @@ def main():
     parser.add_argument("--region", help="The AWS region to use.", type=str,
                         choices=boto3.session.Session().get_available_regions(
                             'codebuild'))
-    args = parser.parse_args()
+    parser.add_argument("--python",
+                        help="The Python version to use. Defaults to 3.6.",
+                        type=str, choices=["2.7", "3.6", "3.7"])
 
+    return parser.parse_args()
+
+
+def main():
+    """ Main entry point of the app """
+    print("Starting alppb...")
+    check_for_boto_credentials()
+
+    # Parse args and get values used in functions below.
+    args = parse_args()
     package = args.package
     bucket = args.bucket
     # If region is None boto3 will determine the region to use. See more at,
     # https://boto3.amazonaws.com/v1/documentation/api/latest/guide
     # /configuration.html#configuring-credentials
     region = args.region
+    py_version = args.python
 
     # Create boto3 clients/resources used below.
     iam_client = create_client('iam', region)
@@ -128,8 +137,9 @@ def main():
 
     # Create alppb resources.
     role = iam.create_role(iam_client, bucket)
-    buildspec = codebuild.generate_buildspec(package)
-    codebuild.create_build_project(codebuild_client, role, bucket, buildspec)
+    buildspec = codebuild.generate_buildspec(package, py_version)
+    codebuild.create_build_project(codebuild_client, role, bucket, buildspec,
+                                   codebuild.determine_image(py_version))
     codebuild.build_artifact(codebuild_client)
 
     # Download the artifact.
@@ -141,6 +151,7 @@ def main():
     s3.delete_artifact(s3_client, bucket)
 
     print("SUCCESS")
+    exit(0)
 
 
 if __name__ == "__main__":

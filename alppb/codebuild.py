@@ -5,7 +5,59 @@ import time
 import yaml
 
 
-def generate_buildspec(package):
+def determine_image(py_version):
+    """
+    Determines which Docker image to use for CodeBuild based on the Python
+    version being used on AWS Lambda.
+
+    Parameters
+    ----------
+    py_version : str
+        Python version being used. Must be one of "2.7", "3.6", or "3.7"
+
+    Returns
+    -------
+    str
+        URI of the Docker image.
+    """
+    if py_version == "2.7":
+        return "irlrobot/alppb-python27"
+    if py_version == ("3.6" or "None"):
+        return "irlrobot/alppb-python36"
+    if py_version == "3.7":
+        return "irlrobot/alppb-python37"
+
+    # We should never get here, but fallback to Python 3.6.
+    return "irlrobot/alppb-python36"
+
+
+def pip_to_use(py_version):
+    """
+    Determines which pip command to use for CodeBuild based on the Python
+    version being used on AWS Lambda.
+
+    Parameters
+    ----------
+    py_version : str
+        Python version being used. Must be one of "2.7", "3.6", or "3.7"
+
+    Returns
+    -------
+    str
+        Pip command that should be used.
+    """
+    if py_version == "2.7":
+        return "pip-2.7"
+    if py_version == ("3.6" or "None"):
+        return "pip-3.6"
+    if py_version == "3.7":
+        return "pip3.7"
+
+    # We should never get here, but fallback to pip-3.6.
+    return "pip-3.6"
+
+
+def generate_buildspec(package, py_version):
     """
     Creates a valid Buildspec, from a template, for an AWS CodeBuild project.
     The template requires a valid PyPi package to be specified.
@@ -14,6 +66,9 @@ def generate_buildspec(package):
     ----------
     package : str
         Name of the PyPi package to be built by AWS CodeBuild.
+
+    py_version: str
+        Python version being used. Must be one of "2.7", "3.6", or "3.7"
 
     Returns
     -------
@@ -25,7 +80,8 @@ def generate_buildspec(package):
         "phases": {
             "build": {
                 "commands": [
-                    "pip-3.6 install {} -t alppb".format(package),
+                    "{} install {} -t alppb".format(pip_to_use(py_version),
+                                                    package),
                     "cd alppb/",
                     "zip -r ../alppb.zip *"
                 ]
@@ -39,7 +95,7 @@ def generate_buildspec(package):
     })
 
 
-def create_build_project(client, role, bucket, buildspec):
+def create_build_project(client, role, bucket, buildspec, image):
     """
     Creates a new AWS CodeBuild Project to build the PyPi package(s).
 
@@ -53,6 +109,8 @@ def create_build_project(client, role, bucket, buildspec):
         Name of the bucket the build artifact will be put in.
     buildspec : str
         A valid AWS CodeBuild Buildspec in YAML. Use s3.generate_buildspec().
+    image : str
+        The Docker image to use for the CodeBuild project.
 
     Returns
     -------
@@ -75,7 +133,7 @@ def create_build_project(client, role, bucket, buildspec):
             },
             environment={
                 'type': 'LINUX_CONTAINER',
-                'image': 'irlrobot/alppb-python36:latest',
+                'image': image,
                 'computeType': 'BUILD_GENERAL1_SMALL',
             },
             serviceRole=role,
@@ -94,7 +152,7 @@ def create_build_project(client, role, bucket, buildspec):
             },
             environment={
                 'type': 'LINUX_CONTAINER',
-                'image': 'irlrobot/amazonlinux1:latest',
+                'image': image,
                 'computeType': 'BUILD_GENERAL1_SMALL',
             },
             serviceRole=role,

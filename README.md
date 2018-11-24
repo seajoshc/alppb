@@ -35,8 +35,12 @@ Build package requests in bucket foo
     - [ ] Valid PyPi package
     - [X] Bucket and CodeBuild need to be in same region
     - [ ] Bucket exists (NoSuchBucket)
+    - [ ] Bucket has valid name (botocore.exceptions.ParamValidationError)
 - [ ] Unit tests
 - [ ] Integration tests
+    - [X] Test each version of Python supported
+    - [ ] Verify they're using the actual right python versions as part of each test
+    - [ ] Inspect the zip and make sure it contains what's expected
 - [x] Package and Submit to PyPi
 - [ ] Dockerize and submit to Dockerhub
 - [x] Make CodeBuild Docker image details more clear and document
@@ -48,7 +52,7 @@ Build package requests in bucket foo
 - [ ] Specify download location of the artifact
 - [ ] Create an s3 bucket when an arg is specified
 - [ ] Allow user to optionally specify an IAM role
-- [ ] Specify the Python version that should be used to build the package (choices come from supported AWS Lambda versions)
+- [X] Specify the Python version that should be used to build the package (choices come from supported AWS Lambda versions)
 
 # FAQs
 1) Why AWS CodeBuild? Why not X instead?
