@@ -38,6 +38,9 @@ Build package requests in bucket foo
     - [ ] Bucket has valid name (botocore.exceptions.ParamValidationError)
 - [ ] Unit tests
 - [ ] Integration tests
+    - [X] Test each version of Python supported
+    - [ ] Verify they're using the actual right python versions as part of each test
+    - [ ] Inspect the zip and make sure it contains what's expected
 - [x] Package and Submit to PyPi
 - [ ] Dockerize and submit to Dockerhub
 - [x] Make CodeBuild Docker image details more clear and document
