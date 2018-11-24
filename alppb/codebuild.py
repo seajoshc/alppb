@@ -48,10 +48,10 @@ def pip_to_use(py_version):
     """
     if py_version == "2.7":
         return "pip-2.7"
-    if py_version == "3.6" or "None":
+    if py_version == ("3.6" or "None"):
         return "pip-3.6"
     if py_version == "3.7":
-        return "/usr/local/bin/pip3.7"
+        return "pip3.7"
 
     # We should never get here, but fallback to pip-3.6.
     return "pip-3.6"
