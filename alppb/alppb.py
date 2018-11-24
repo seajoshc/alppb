@@ -98,6 +98,8 @@ def main():
     parser.add_argument("--region", help="The AWS region to use.", type=str,
                         choices=boto3.session.Session().get_available_regions(
                             'codebuild'))
+    parser.add_argument("--python", help="The Python version to use.",
+                        type=str, choices=["2.7", "3.6", "3.7"])
     args = parser.parse_args()
 
     package = args.package
@@ -106,6 +108,7 @@ def main():
     # https://boto3.amazonaws.com/v1/documentation/api/latest/guide
     # /configuration.html#configuring-credentials
     region = args.region
+    py_version = args.python
 
     # Create boto3 clients/resources used below.
     iam_client = create_client('iam', region)
@@ -128,8 +131,9 @@ def main():
 
     # Create alppb resources.
     role = iam.create_role(iam_client, bucket)
-    buildspec = codebuild.generate_buildspec(package)
-    codebuild.create_build_project(codebuild_client, role, bucket, buildspec)
+    buildspec = codebuild.generate_buildspec(package, py_version)
+    codebuild.create_build_project(codebuild_client, role, bucket, buildspec,
+                                   codebuild.determine_image(py_version))
     codebuild.build_artifact(codebuild_client)
 
     # Download the artifact.
