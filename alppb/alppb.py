@@ -84,12 +84,8 @@ def create_resource(service, region):
         exit(1)
 
 
-def main():
-    """ Main entry point of the app """
-    print("Starting alppb...")
-    check_for_boto_credentials()
-
-    # Parsing arguments.
+def parse_args():
+    """ Setup ArgumentParser """
     parser = argparse.ArgumentParser()
     parser.add_argument("package", help="The PyPi package you want to build.",
                         type=str)
@@ -101,8 +97,17 @@ def main():
     parser.add_argument("--python",
                         help="The Python version to use. Defaults to 3.6.",
                         type=str, choices=["2.7", "3.6", "3.7"])
-    args = parser.parse_args()
+    
+    return parser.parse_args()
 
+
+def main():
+    """ Main entry point of the app """
+    print("Starting alppb...")
+    check_for_boto_credentials()
+
+    # Parse args and get values used in functions below.
+    args = parse_args()
     package = args.package
     bucket = args.bucket
     # If region is None boto3 will determine the region to use. See more at,
@@ -146,6 +151,7 @@ def main():
     s3.delete_artifact(s3_client, bucket)
 
     print("SUCCESS")
+    exit(0)
 
 
 if __name__ == "__main__":
