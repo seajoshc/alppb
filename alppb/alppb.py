@@ -98,7 +98,8 @@ def main():
     parser.add_argument("--region", help="The AWS region to use.", type=str,
                         choices=boto3.session.Session().get_available_regions(
                             'codebuild'))
-    parser.add_argument("--python", help="The Python version to use.",
+    parser.add_argument("--python",
+                        help="The Python version to use. Defaults to 3.6.",
                         type=str, choices=["2.7", "3.6", "3.7"])
     args = parser.parse_args()
 
