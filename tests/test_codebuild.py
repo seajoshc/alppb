@@ -5,6 +5,8 @@ from alppb.codebuild import pip_to_use
 """
 alppb.codebuild.determine_image()
 """
+
+
 def test_determine_image_python27():
     assert determine_image("2.7") == "irlrobot/alppb-python27"
 
@@ -35,6 +37,8 @@ def test_determine_image_invalid():
 """
 alppb.codebuild.pip_to_use()
 """
+
+
 def test_pip_to_use_python27():
     assert pip_to_use("2.7") == "pip-2.7"
 
