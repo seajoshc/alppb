@@ -48,7 +48,7 @@ Build package requests in bucket foo
 - [ ] Specify download location of the artifact
 - [ ] Create an s3 bucket when an arg is specified
 - [ ] Allow user to optionally specify an IAM role
-- [ ] Specify the Python version that should be used to build the package (choices come from supported AWS Lambda versions)
+- [X] Specify the Python version that should be used to build the package (choices come from supported AWS Lambda versions)
 
 # FAQs
 1) Why AWS CodeBuild? Why not X instead?
