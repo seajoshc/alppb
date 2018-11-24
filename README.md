@@ -58,11 +58,11 @@ AWS CodeBuild has a perpetual free tier and it's super easy to spin up, and tear
 2) What image is being used for CodeBuild? Can I inspect the image being used for the build?
 
 There are three images, one for each version of Python supported by AWS Lambda:
-    * Python 2.7 - https://hub.docker.com/r/irlrobot/alppb-python27/
-        * Dockerfile: https://github.com/irlrobot/dockerfiles/tree/master/alppb-python27
-    * Python 3.6 - https://hub.docker.com/r/irlrobot/alppb-python36/
-        * Dockerfile: https://github.com/irlrobot/dockerfiles/tree/master/alppb-python36
-    * Python 3.7 - https://hub.docker.com/r/irlrobot/alppb-python37/
-        * Dockerfile: https://github.com/irlrobot/dockerfiles/tree/master/alppb-python37
+* Python 2.7 - https://hub.docker.com/r/irlrobot/alppb-python27/
+    * Dockerfile: https://github.com/irlrobot/dockerfiles/tree/master/alppb-python27
+* Python 3.6 - https://hub.docker.com/r/irlrobot/alppb-python36/
+    * Dockerfile: https://github.com/irlrobot/dockerfiles/tree/master/alppb-python36
+* Python 3.7 - https://hub.docker.com/r/irlrobot/alppb-python37/
+    * Dockerfile: https://github.com/irlrobot/dockerfiles/tree/master/alppb-python37
 
 Each image is running Amazon Linux 1 version 2017.03.1.20170812 which is [what AWS Lambda uses](https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html).
