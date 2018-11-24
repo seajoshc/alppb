@@ -2,8 +2,8 @@ astroid==2.0.4
 atomicwrites==1.2.1
 attrs==18.2.0
 bleach==3.0.2
-boto3==1.9.50
-botocore==1.12.50
+boto3==1.7.74
+botocore==1.10.74
 certifi==2018.10.15
 chardet==3.0.4
 docutils==0.14
@@ -21,7 +21,7 @@ pycodestyle==2.4.0
 pyflakes==2.0.0
 Pygments==2.2.0
 pylint==2.1.1
-pytest==4.0.0
+pytest==4.0.1
 python-dateutil==2.7.5
 PyYAML==3.13
 readme-renderer==24.0
