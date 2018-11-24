@@ -53,8 +53,8 @@ def pip_to_use(py_version):
     if py_version == "3.7":
         return "/usr/local/bin/pip3.7"
 
-    # We should never get here, but fallback to trying just pip.
-    return "pip"
+    # We should never get here, but fallback to pip-3.6.
+    return "pip-3.6"
 
 
 def generate_buildspec(package, py_version):
