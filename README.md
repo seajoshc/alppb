@@ -37,9 +37,9 @@ Build package requests in bucket foo
     - [ ] Bucket exists (NoSuchBucket)
 - [ ] Unit tests
 - [ ] Integration tests
-- [ ] Package and Submit to PyPi
+- [x] Package and Submit to PyPi
 - [ ] Dockerize and submit to Dockerhub
-- [ ] Make CodeBuild Docker image details more clear and document, also match boto version used
+- [x] Make CodeBuild Docker image details more clear and document
 - [ ] Add verbosity levels
 - [ ] Add Sphinx docs
 ## Planned
