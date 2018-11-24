@@ -94,7 +94,7 @@ def create_build_project(client, role, bucket, buildspec):
             },
             environment={
                 'type': 'LINUX_CONTAINER',
-                'image': 'irlrobot/amazonlinux1:latest',
+                'image': 'irlrobot/alppb-python36:latest',
                 'computeType': 'BUILD_GENERAL1_SMALL',
             },
             serviceRole=role,
