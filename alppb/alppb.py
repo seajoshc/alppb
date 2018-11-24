@@ -97,7 +97,7 @@ def parse_args():
     parser.add_argument("--python",
                         help="The Python version to use. Defaults to 3.6.",
                         type=str, choices=["2.7", "3.6", "3.7"])
-    
+
     return parser.parse_args()
 
 
