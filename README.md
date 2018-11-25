@@ -42,7 +42,6 @@ Build package requests in bucket foo
     - [ ] Verify they're using the actual right python versions as part of each test
     - [ ] Inspect the zip and make sure it contains what's expected
 - [x] Package and Submit to PyPi
-- [ ] Dockerize and submit to Dockerhub
 - [x] Make CodeBuild Docker image details more clear and document
 - [ ] Add verbosity levels
 - [ ] Add Sphinx docs
@@ -53,6 +52,7 @@ Build package requests in bucket foo
 - [ ] Create an s3 bucket when an arg is specified
 - [ ] Allow user to optionally specify an IAM role
 - [X] Specify the Python version that should be used to build the package (choices come from supported AWS Lambda versions)
+- [ ] Dockerize and submit to Dockerhub
 
 # FAQs
 1) Why AWS CodeBuild? Why not X instead?
