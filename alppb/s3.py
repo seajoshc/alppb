@@ -1,6 +1,8 @@
 """
 Administration of Amazon S3 Resources through a boto3 client.
 """
+from botocore.exceptions import ClientError
+from botocore.exceptions import ParamValidationError
 
 
 def download_artifact(resource, bucket, key='alppbBuilder/alppb.zip',
@@ -64,7 +66,25 @@ def bucket_region(client, bucket):
     str
         Region of the bucket.
     """
-    response = client.get_bucket_location(Bucket=bucket)
+    # Check if the bucket exists and has a valid name.
+    try:
+        response = client.get_bucket_location(Bucket=bucket)
+    except ClientError as err:
+        if err.response['Error']['Code'] == 'NoSuchBucket':
+            print("ERROR: {} is an invalid bucket name. "
+                  "Please check the name and try again."
+                  .format(bucket))
+            exit(1)
+        else:
+            print("ERROR: Unhandled exception. Please submit a bug report to "
+                  "https://github.com/irlrobot/alppb/issues/new")
+            raise err
+    except ParamValidationError:
+        print("ERROR: {} is an invalid bucket name. "
+              "Please check the name and try again."
+              .format(bucket))
+        exit(1)
+
     location = response.get('LocationConstraint')
     if location is None:
         return 'us-east-1'
