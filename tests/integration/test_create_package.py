@@ -15,10 +15,13 @@ def test_creating_default_package_with_valid_input():
 
 
 def test_creating_default_package_with_bad_bucket():
-    testargs = ["alppb", "987dfdsf#&^%#*", "$^&$&*sfdsfsdf"]
+    testargs = ["alppb", "mlbgame", "123sdblahalppbdf213"]
     with patch.object(sys, 'argv', testargs):
-        with pytest.raises(Exception):
+        with pytest.raises(SystemExit) as pytest_wrapped_e:
             main()
+
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 1
 
 
 def test_creating_python27_package_with_valid_input():
@@ -32,10 +35,13 @@ def test_creating_python27_package_with_valid_input():
 
 
 def test_creating_python27_package_with_bad_bucket():
-    testargs = ["alppb", "987dfdsf#&^%#*", "$^&$&*sfdsfsdf", "--python", "2.7"]
+    testargs = ["alppb", "mlbgame", "123sdblahalppbdf213", "--python", "2.7"]
     with patch.object(sys, 'argv', testargs):
-        with pytest.raises(Exception):
+        with pytest.raises(SystemExit) as pytest_wrapped_e:
             main()
+
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 1
 
 
 def test_creating_python36_package_with_valid_input():
@@ -49,10 +55,13 @@ def test_creating_python36_package_with_valid_input():
 
 
 def test_creating_python36_package_with_bad_bucket():
-    testargs = ["alppb", "987dfdsf#&^%#*", "$^&$&*sfdsfsdf", "--python", "3.6"]
+    testargs = ["alppb", "mlbgame", "123sdblahalppbdf213", "--python", "3.6"]
     with patch.object(sys, 'argv', testargs):
-        with pytest.raises(Exception):
+        with pytest.raises(SystemExit) as pytest_wrapped_e:
             main()
+
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 1
 
 
 def test_creating_python37_package_with_valid_input():
@@ -66,7 +75,10 @@ def test_creating_python37_package_with_valid_input():
 
 
 def test_creating_python37_package_with_bad_bucket():
-    testargs = ["alppb", "987dfdsf#&^%#*", "$^&$&*sfdsfsdf", "--python", "3.7"]
+    testargs = ["alppb", "mlbgame", "123sdblahalppbdf213", "--python", "3.7"]
     with patch.object(sys, 'argv', testargs):
-        with pytest.raises(Exception):
+        with pytest.raises(SystemExit) as pytest_wrapped_e:
             main()
+
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 1
