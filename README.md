@@ -34,8 +34,8 @@ Build package requests in bucket foo
     - [X] pre-req checking
     - [ ] Valid PyPi package
     - [X] Bucket and CodeBuild need to be in same region
-    - [ ] Bucket exists (NoSuchBucket)
-    - [ ] Bucket has valid name (botocore.exceptions.ParamValidationError)
+    - [X] Bucket exists (NoSuchBucket)
+    - [X] Bucket has valid name (botocore.exceptions.ParamValidationError)
 - [ ] Unit tests
 - [ ] Integration tests
     - [X] Test each version of Python supported
