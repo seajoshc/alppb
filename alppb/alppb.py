@@ -87,16 +87,31 @@ def create_resource(service, region):
 def parse_args():
     """ Setup ArgumentParser """
     parser = argparse.ArgumentParser()
-    parser.add_argument("package", help="The PyPi package you want to build.",
+
+    parser.add_argument("package",
+                        help="The PyPi package you want to build on "
+                             "Amazon Linux.",
                         type=str)
-    parser.add_argument("bucket", help="Name of the S3 bucket to use.",
+
+    parser.add_argument("bucket",
+                        help="Name of the S3 bucket to use. This bucket "
+                             "temporarily stores the build artifact and is "
+                             "used AWS CodeBuild.",
                         type=str)
-    parser.add_argument("--region", help="The AWS region to use.", type=str,
+
+    parser.add_argument("-r", "--region",
                         choices=boto3.session.Session().get_available_regions(
-                            'codebuild'))
-    parser.add_argument("--python",
-                        help="The Python version to use. Defaults to 3.6.",
-                        type=str, choices=["2.7", "3.6", "3.7"])
+                            'codebuild'),
+                        help="The AWS region to use for building the package. "
+                             "This region must match the region that the "
+                             "specified S3 bucket exists in.",
+                        type=str)
+
+    parser.add_argument("-p", "--python",
+                        choices=["2.7", "3.6", "3.7"],
+                        help="The Python version to use. Defaults to 3.6 if "
+                             "not specified.",
+                        type=str)
 
     return parser.parse_args()
 
