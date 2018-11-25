@@ -45,6 +45,7 @@ Build package requests in bucket foo
 - [x] Make CodeBuild Docker image details more clear and document
 - [ ] Add verbosity levels
 - [ ] Add Sphinx docs
+    - [ ] readthedocs.org
 ## Planned
 - [ ] One or more modules can be specified in one invocation of alppb
 - [ ] Allow specification of a requirements.txt file to use as a list of all modules to build
