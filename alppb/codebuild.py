@@ -198,7 +198,6 @@ def wait_for_build_to_complete(client, build_id):
     if status == 'SUCCEEDED':
         print("Build completed...")
         return
-    # TODO add case when status is FAILED
     elif status == 'IN_PROGRESS':
         print(">>Build {}, waiting 10 seconds...".format(status))
         time.sleep(10)
