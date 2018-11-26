@@ -114,7 +114,7 @@ def parse_args():
                              "not specified.",
                         type=str)
 
-    parser.add_argument("--version",
+    parser.add_argument("-v", "--version",
                         action='version',
                         help="Prints the version of alppb you are using.",
                         version="alppb {}".format(__version__))
