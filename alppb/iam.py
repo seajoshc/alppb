@@ -48,8 +48,8 @@ def create_role(client, bucket):
     add_role_policy(client, bucket)
 
     # TODO be smarter about checking if the role is ready
-    print(">>Waiting 10 seconds for policy propagation before continuing...")
-    time.sleep(10)
+    print(">>Waiting for policy propagation before continuing...")
+    time.sleep(12)
 
     return str(response.get('Role').get('Arn'))
 
