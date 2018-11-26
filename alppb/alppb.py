@@ -28,7 +28,8 @@ def check_for_boto_credentials():
     session = boto3.Session()
     credentials = session.get_credentials()
     if credentials is None:
-        print("ERROR: boto3 credentials missing. "
+        print("ERROR: AWS credentials not detected. "
+              "Is awscli installed and configued? "
               "Does ~/.aws/credentials exist?")
         exit(1)
 
@@ -124,9 +125,6 @@ def parse_args():
 
 def main():
     """ Main entry point of the app """
-    print("Starting alppb...")
-    check_for_boto_credentials()
-
     # Parse args and get values used in functions below.
     args = parse_args()
     package = args.package
@@ -136,6 +134,9 @@ def main():
     # /configuration.html#configuring-credentials
     region = args.region
     py_version = args.python
+
+    print("Starting alppb...")
+    check_for_boto_credentials()
 
     # Create boto3 clients/resources used below.
     iam_client = create_client('iam', region)
