@@ -9,6 +9,7 @@ __license__ = "MIT"
 import argparse
 import boto3
 from botocore.exceptions import NoRegionError
+from .__version__ import __version__
 from . import codebuild
 from . import iam
 from . import s3
@@ -112,6 +113,11 @@ def parse_args():
                         help="The Python version to use. Defaults to 3.6 if "
                              "not specified.",
                         type=str)
+
+    parser.add_argument("--version",
+                        action='version',
+                        help="Prints the version of alppb you are using.",
+                        version="alppb {}".format(__version__))
 
     return parser.parse_args()
 
