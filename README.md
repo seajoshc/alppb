@@ -3,6 +3,17 @@ alppb builds Python packages using the same version of Amazon Linux that the AWS
 
 Why is this a problem that needs to be solved? AWS Lambda requires you to package up your Python project along with all of its dependencies in order to run. If your AWS Lambda Python project has package(s) with C extension modules (or dependencies that do), you will need to build them on Amazon Linux for your app to work. alppb uses the AWS CodeBuild service ([perpetual free tier includes 100 build minutes per month](https://aws.amazon.com/codebuild/pricing/)) to build the package(s) on Amazon Linux and download them to your local machine for you. Simply unzip the downloaded package(s) into your deployment bundle and upload to the AWS Lambda service.
 
+This is largely a [portfolio](https://github.com/irlrobot/portfolio) project, as this problem can be solved pretty easily by creating [a Docker image](https://github.com/irlrobot/dockerfiles/blob/master/alppb-python36/Dockerfile) matching [the environment AWS Lambda uses](https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html) and building packages with it. However, this project is meant to showcase my ability to do the following:
+1. Write clean, Pythonic code.
+2. Work with the boto3 SDK.
+3. Use AWS.
+4. Build a CLI app.
+5. Handle and work with exceptions.
+6. Write unit and integration tests.
+7. Work with Docker and containers.
+8. Build and maintain PyPi packages.
+9. Document a project.
+
 # How To Use alppb
 
 ```shell
