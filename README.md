@@ -22,7 +22,23 @@ alppb -h
 ```
 
 Build package requests in bucket foo
-`alppb requests foo`
+
+```shell
+alppb requests foo
+```
+
+## Prefer Docker?
+A Dockerfile is included in the source. Simply run 
+```shell
+docker build . -t alppb
+```
+
+followed by
+
+```shell
+docker run --rm -it -v ~/.aws:/home/someuser/.aws \
+    -v $(pwd):/alppb alppb pypi_package s3_bucket
+```
 
 # TODO
 ## Pre 1.0.0
@@ -64,7 +80,7 @@ Build package requests in bucket foo
 - [ ] Create an s3 bucket when an arg is specified
 - [ ] Allow user to optionally specify an IAM role
 - [X] Specify the Python version that should be used to build the package (choices come from supported AWS Lambda versions)
-- [ ] Dockerize and submit to Dockerhub
+- [X] Dockerize
 
 # FAQs
 1) Why AWS CodeBuild? Why not X instead?
