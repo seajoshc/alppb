@@ -1,9 +1,18 @@
+# Build
+# docker build . -t alppb
+
+# Run
+# docker run --rm -it -v ~/.aws:/home/someuser/.aws \
+#     -v $(pwd):/alppb alppb pypi_package s3_bucket
+
 FROM python:3.6-alpine3.8
 
-COPY alppb-runner.py alppb-runner.py
-COPY requirements.txt requirements.txt
-COPY alppb/* alppb/
+ENV PATH=/home/someuser/.local/bin/:$PATH
 
-RUN pip install -r requirements.txt
+RUN adduser --disabled-password --gecos "" someuser
+USER someuser
 
-ENTRYPOINT [ "./alppb-runner.py" ]
+WORKDIR /alppb
+RUN pip install alppb --user
+
+ENTRYPOINT [ "alppb" ]
